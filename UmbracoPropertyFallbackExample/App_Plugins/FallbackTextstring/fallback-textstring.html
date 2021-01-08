@@ -1,4 +1,16 @@
 ﻿<div ng-controller="FallbackTextstringController">
-    <input type="text" ng-model="model.value" ng-trim="false" placeholder="{{model.config.fallbackTemplate}}" class="umb-property-editor umb-textstring" />
-    <small><strong>Current value:</strong> {{model.config.fallbackTemplate}}</small>
+    <input type="text" ng-model="model.value.value" ng-trim="false" placeholder="{{model.value.fallback}}" class="umb-property-editor umb-textstring" />
+    <input type="hidden" ng-model="model.value.fallback" />
+    <p ng-if="model.value.value.length == 0">
+        <small>
+            <strong>Default value:</strong>
+            {{model.value.fallback}}
+        </small>
+    </p>
+    <p ng-if="model.value.value.length != 0">
+        <small>
+            <strong>Current value:</strong>
+            {{model.value.value}}
+        </small>
+    </p>
 </div>
