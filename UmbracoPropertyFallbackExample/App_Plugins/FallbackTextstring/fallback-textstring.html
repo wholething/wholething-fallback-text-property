@@ -2,16 +2,11 @@
     <input type="text" ng-model="model.value.value" ng-trim="false" placeholder="{{model.value.fallback}}" class="umb-property-editor umb-textstring" />
     <input type="hidden" ng-model="model.value.fallback" />
     <div class="fallback-preview">
-        <p ng-if="model.value.value.length == 0">
+        <p>
             <small>
-                <strong>Default value:</strong>
+                <strong ng-if="model.value.value.length != 0">Default value:</strong>
+                <strong ng-if="model.value.value.length == 0">Current value:</strong>
                 <input type="text" ng-model="model.value.fallback" ng-trim="false" class="umb-property-editor umb-textstring" disabled="disabled" />
-            </small>
-        </p>
-        <p ng-if="model.value.value.length != 0">
-            <small>
-                <strong>Current value:</strong>
-                <input type="text" ng-model="model.value.value" ng-trim="false" class="umb-property-editor umb-textstring" disabled="disabled" />
             </small>
         </p>
     </div>
