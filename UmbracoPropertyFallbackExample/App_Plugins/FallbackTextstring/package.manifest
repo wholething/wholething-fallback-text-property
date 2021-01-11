@@ -22,5 +22,8 @@
   ],
   "javascript": [
     "~/App_Plugins/FallbackTextstring/fallback-textstring.controller.js"
+  ],
+  "css": [
+    "~/App_Plugins/FallbackTextstring/fallback-textstring.css"
   ]
 }
