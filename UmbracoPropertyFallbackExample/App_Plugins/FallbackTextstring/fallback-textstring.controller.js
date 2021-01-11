@@ -32,6 +32,9 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             return new Promise((resolve) => {
                 contentResource.getById(nodeId).then(function(node) {
                     addToDictionary(node, true);
+                }).catch(function (err) {
+                    console.log(`Couldn't find node mentioned in template (${nodeId})`);
+                }).finally(function() {
                     resolve();
                 });
             });
