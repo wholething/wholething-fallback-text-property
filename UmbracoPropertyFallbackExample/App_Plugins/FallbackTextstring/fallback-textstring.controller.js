@@ -21,7 +21,6 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         if (!$scope.model.value.value) {
             $scope.model.value = {
                 value: '',
-                fallback: null,
                 useValue: false
             }
         }
@@ -58,7 +57,7 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function updateFallbackValue() {
-        $scope.model.value.fallback = Mustache.render(template, templateDictionary);
+        $scope.fallback = Mustache.render(template, templateDictionary);
     }
 
     function addToDictionary(node, prefix) {
