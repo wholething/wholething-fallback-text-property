@@ -13,13 +13,24 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             init();
         });
 
+    $scope.onUseValueChange = function() {
+        $scope.model.value.useValue = $scope.useValue === 'true';
+    };
+
     function init() {
         if (!$scope.model.value.value) {
             $scope.model.value = {
                 value: '',
-                fallback: null
+                fallback: null,
+                useValue: false
             }
         }
+
+        if ($scope.model.value.hasValue && !$scope.model.value) {
+            $scope.model.value.hasValue = false;
+        }
+
+        $scope.useValue = $scope.model.value.useValue.toString();
 
         template = $scope.model.config.fallbackTemplate;
 

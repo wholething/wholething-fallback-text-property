@@ -3,7 +3,7 @@
     {
       "alias": "FallbackTextstring",
       "name": "Textstring with fallback",
-      "icon": " icon-edit",
+      "icon": "icon-edit",
       "group": "Rich Content",
       "editor": {
         "view": "~/App_Plugins/FallbackTextstring/fallback-textstring.html"

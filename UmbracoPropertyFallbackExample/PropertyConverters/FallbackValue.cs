@@ -10,7 +10,7 @@ namespace UmbracoPropertyFallbackExample.PropertyConverters
         {
             get
             {
-                if (string.IsNullOrEmpty(_value))
+                if (string.IsNullOrEmpty(_value) || !UseValue)
                 {
                     return Fallback;
                 }
@@ -26,5 +26,8 @@ namespace UmbracoPropertyFallbackExample.PropertyConverters
         }
 
         public string Fallback { get; set; }
+
+
+        public bool UseValue { get; set; }
     }
 }

@@ -1,13 +1,23 @@
-﻿<div ng-controller="FallbackTextstringController">
-    <input type="text" ng-model="model.value.value" ng-trim="false" placeholder="{{model.value.fallback}}" class="umb-property-editor umb-textstring" />
-    <input type="hidden" ng-model="model.value.fallback" />
-    <div class="fallback-preview">
-        <p>
-            <small>
-                <strong ng-if="model.value.value.length != 0">Default value:</strong>
-                <strong ng-if="model.value.value.length == 0">Current value:</strong>
-                <input type="text" ng-model="model.value.fallback" ng-trim="false" class="umb-property-editor umb-textstring" disabled="disabled" />
-            </small>
-        </p>
+﻿<div ng-controller="FallbackTextstringController" class="fallback-textstring" ng-class="{'use-value': model.value.useValue}">
+    
+    <div class="fallback">
+        <umb-radiobutton name="useValueRadio-{{model.alias}}"
+                         value="false"
+                         model="useValue"
+                         text="Default"
+                         on-change="onUseValueChange()">
+        </umb-radiobutton>
+        <input type="text" ng-model="model.value.fallback" ng-trim="false" class="umb-property-editor umb-textstring" disabled="disabled" />
+    </div>
+    
+    <div class="value">
+        <umb-radiobutton name="useValueRadio-{{model.alias}}"
+                         value="true"
+                         model="useValue"
+                         text="Custom"
+                         on-change="onUseValueChange()">
+        </umb-radiobutton>
+
+        <input ng-if="model.value.useValue" type="text" ng-model="model.value.value" ng-required="model.value.useValue" ng-trim="false" class="umb-property-editor umb-textstring" />
     </div>
 </div>
