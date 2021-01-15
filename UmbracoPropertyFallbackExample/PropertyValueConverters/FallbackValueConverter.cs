@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using HandlebarsDotNet;
@@ -55,7 +56,7 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
 
             if (fallbackValue.UseValue)
             {
-                return fallbackValue;
+                return fallbackValue.Value;
             }
 
             var dataType = _dataTypeService.GetByEditorAlias(propertyType.EditorAlias).First();
@@ -77,12 +78,17 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
             foreach (var nodeId in otherNodeIds)
             {
                 var node = _contentService.GetById(nodeId);
+
+                // There is some quick of the Mustache implementation that means a variable name cannot
+                // start with a number!
+                template = template.Replace($"{nodeId}", $"node{nodeId}");
+
                 foreach (var property in node.Properties)
                 {
                     var value = property.GetValue();
                     if (value != null && value is string strValue)
                     {
-                        dictionary[$"{node.Id}:{property.Alias}"] = strValue;
+                        dictionary[$"node{node.Id}:{property.Alias}"] = strValue;
                     }
                 }
             }
