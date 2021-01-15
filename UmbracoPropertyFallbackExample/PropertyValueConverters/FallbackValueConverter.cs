@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Mustache;
+using System.Text.RegularExpressions;
+using HandlebarsDotNet;
 using Newtonsoft.Json;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
@@ -12,15 +13,13 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
 {
     public class FallbackValueConverter : IPropertyValueConverter
     {
-        private readonly IUmbracoContextFactory _contextFactory;
-        private readonly IContentTypeService _contentTypeService;
+        private readonly IContentService _contentService;
         private readonly IDataTypeService _dataTypeService;
 
-        public FallbackValueConverter(/*IUmbracoContextFactory contextFactory, IContentTypeService contentTypeService,*/ IDataTypeService dataTypeService)
+        public FallbackValueConverter(IDataTypeService dataTypeService, IContentService contentService)
         {
-            //_contextFactory = contextFactory;
-            //_contentTypeService = contentTypeService;
             _dataTypeService = dataTypeService;
+            _contentService = contentService;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
@@ -58,18 +57,49 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
 
             var template = (string) ((Dictionary<string, object>) dataType.Configuration)["fallbackTemplate"];
 
-            template = template.Replace(':', '-');
+            var dictionary = new Dictionary<string, string>();
 
-            var dictionary = new Dictionary<string, string>
+            foreach (var publishedProperty in owner.Properties)
             {
-                { "pageTitle", "pageTitle" }
-            };
+                var value = publishedProperty.GetSourceValue();
+                if (value != null && value is string strValue)
+                {
+                    dictionary[publishedProperty.Alias] = strValue;
+                }
+            }
 
-            var compiler = new FormatCompiler();
-            var generator = compiler.Compile(template);
-            var result = generator.Render(dictionary);
+            var otherNodeIds = GetOtherNodeIds(template);
+            foreach (var nodeId in otherNodeIds)
+            {
+                var node = _contentService.GetById(nodeId);
+                foreach (var property in node.Properties)
+                {
+                    var value = property.GetValue();
+                    if (value != null && value is string strValue)
+                    {
+                        dictionary[$"{node.Id}:{property.Alias}"] = strValue;
+                    }
+                }
+            }
+
+            var compiled = Handlebars.Compile(template);
+            var result = compiled(dictionary);
 
             return fallbackValue.Value;
+        }
+
+        private List<int> GetOtherNodeIds(string template)
+        {
+            var regex = new Regex(@"([0-9]+):");
+            var matches = regex.Matches(template);
+
+            var nodeIds = new List<int>();
+            foreach (Match match in matches)
+            {
+                nodeIds.Add(int.Parse(match.Groups[1].Value));
+            }
+
+            return nodeIds;
         }
 
         public object ConvertIntermediateToObject(IPublishedElement owner, IPublishedPropertyType propertyType,
