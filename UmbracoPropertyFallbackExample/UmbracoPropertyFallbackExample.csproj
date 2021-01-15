@@ -357,7 +357,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyValueConverters\FallbackValue.cs" />
     <Compile Include="PropertyValueConverters\FallbackValueConverter.cs" />
-    <Compile Include="Startup\ContentFinderComposer.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\imageprocessor\security.config" />
