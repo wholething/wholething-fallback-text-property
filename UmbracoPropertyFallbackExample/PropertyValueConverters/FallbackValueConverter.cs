@@ -53,6 +53,11 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
         {
             var fallbackValue = JsonConvert.DeserializeObject<FallbackValue>(source.ToString());
 
+            if (fallbackValue.UseValue)
+            {
+                return fallbackValue;
+            }
+
             var dataType = _dataTypeService.GetByEditorAlias(propertyType.EditorAlias).First();
 
             var template = (string) ((Dictionary<string, object>) dataType.Configuration)["fallbackTemplate"];
@@ -77,15 +82,14 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
                     var value = property.GetValue();
                     if (value != null && value is string strValue)
                     {
-                        dictionary[$"{node.Id}:{property.Alias}"] = strValue;
+                        dictionary[$"{node.Id}{property.Alias}"] = strValue;
                     }
                 }
             }
 
             var compiled = Handlebars.Compile(template);
-            var result = compiled(dictionary);
 
-            return fallbackValue.Value;
+            return compiled(dictionary); 
         }
 
         private List<int> GetOtherNodeIds(string template)
