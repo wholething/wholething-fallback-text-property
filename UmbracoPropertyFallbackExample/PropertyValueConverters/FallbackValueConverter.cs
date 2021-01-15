@@ -79,7 +79,7 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
             {
                 var node = _contentService.GetById(nodeId);
 
-                // There is some quick of the Mustache implementation that means a variable name cannot
+                // There is some quirk of the Mustache implementation that means a variable name cannot
                 // start with a number!
                 template = template.Replace($"{nodeId}", $"node{nodeId}");
 
