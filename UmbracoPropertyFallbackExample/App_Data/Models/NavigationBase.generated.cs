@@ -33,7 +33,7 @@ namespace Umbraco.Web.PublishedModels
 
 		/// <summary>Title</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
-		global::UmbracoPropertyFallbackExample.PropertyConverters.FallbackValue SeoMetaTitle { get; }
+		string SeoMetaTitle { get; }
 
 		/// <summary>Hide in Navigation</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
@@ -92,11 +92,11 @@ namespace Umbraco.Web.PublishedModels
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
 		[ImplementPropertyType("seoMetaTitle")]
-		public global::UmbracoPropertyFallbackExample.PropertyConverters.FallbackValue SeoMetaTitle => GetSeoMetaTitle(this);
+		public string SeoMetaTitle => GetSeoMetaTitle(this);
 
 		/// <summary>Static getter for Title</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
-		public static global::UmbracoPropertyFallbackExample.PropertyConverters.FallbackValue GetSeoMetaTitle(INavigationBase that) => that.Value<global::UmbracoPropertyFallbackExample.PropertyConverters.FallbackValue>("seoMetaTitle");
+		public static string GetSeoMetaTitle(INavigationBase that) => that.Value<string>("seoMetaTitle");
 
 		///<summary>
 		/// Hide in Navigation: If you don't want this page to appear in the navigation, check this box

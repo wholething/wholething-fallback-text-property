@@ -49,6 +49,6 @@ namespace Umbraco.Web.PublishedModels
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
 		[ImplementPropertyType("text")]
-		public global::UmbracoPropertyFallbackExample.PropertyConverters.FallbackValue Text => this.Value<global::UmbracoPropertyFallbackExample.PropertyConverters.FallbackValue>("text");
+		public string Text => this.Value<string>("text");
 	}
 }
