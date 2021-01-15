@@ -354,7 +354,6 @@
     <Compile Include="App_Data\Models\Person.generated.cs" />
     <Compile Include="App_Data\Models\Product.generated.cs" />
     <Compile Include="App_Data\Models\Products.generated.cs" />
-    <Compile Include="ContentFinders\FallbackPropertyContentFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyValueConverters\FallbackValue.cs" />
     <Compile Include="PropertyValueConverters\FallbackValueConverter.cs" />
