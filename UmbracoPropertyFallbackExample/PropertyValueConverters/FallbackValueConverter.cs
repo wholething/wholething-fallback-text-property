@@ -52,11 +52,11 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
         public object ConvertSourceToIntermediate(IPublishedElement owner, IPublishedPropertyType propertyType, object source,
             bool preview)
         {
-            var fallbackValue = JsonConvert.DeserializeObject<FallbackValue>(source.ToString());
+            var value = source as string;
 
-            if (fallbackValue.UseValue)
+            if (!string.IsNullOrWhiteSpace(value))
             {
-                return fallbackValue.Value;
+                return value;
             }
 
             var dataType = _dataTypeService.GetByEditorAlias(propertyType.EditorAlias).First();
@@ -67,8 +67,8 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
 
             foreach (var publishedProperty in owner.Properties)
             {
-                var value = publishedProperty.GetSourceValue();
-                if (value != null && value is string strValue)
+                var propertyValue = publishedProperty.GetSourceValue();
+                if (propertyValue != null && propertyValue is string strValue)
                 {
                     dictionary[publishedProperty.Alias] = strValue;
                 }
@@ -85,8 +85,8 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
 
                 foreach (var property in node.Properties)
                 {
-                    var value = property.GetValue();
-                    if (value != null && value is string strValue)
+                    var propertyValue = property.GetValue();
+                    if (propertyValue != null && propertyValue is string strValue)
                     {
                         dictionary[$"node{node.Id}:{property.Alias}"] = strValue;
                     }

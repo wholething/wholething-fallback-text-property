@@ -5,6 +5,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     var templateDictionary = {};
     var template;
 
+    var shelvedValue = null;
+
     assetsService
         .load([
             '~/App_Plugins/FallbackTextstring/lib/mustache.min.js'
@@ -13,23 +15,24 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             init();
         });
 
-    $scope.onUseValueChange = function() {
-        $scope.model.value.useValue = $scope.useValue === 'true';
+    $scope.onUseValueChange = function () {
+        // Annoyingly radio button value is a string
+        $scope.useValue = $scope.useValueStr === 'true';
+
+        // If we are switching from custom to default let's "shelve" the custom value 
+        // but bring it back if they go the other way
+        if (!$scope.useValue) {
+            shelvedValue = $scope.model.value;
+            $scope.model.value = null;
+        } else {
+            $scope.model.value = shelvedValue;
+            shelvedValue = null;
+        }
     };
 
     function init() {
-        if (!$scope.model.value.value) {
-            $scope.model.value = {
-                value: '',
-                useValue: false
-            }
-        }
-
-        if ($scope.model.value.hasValue && !$scope.model.value) {
-            $scope.model.value.hasValue = false;
-        }
-
-        $scope.useValue = $scope.model.value.useValue.toString();
+        $scope.useValue = $scope.model.value && $scope.model.value.length > 0;
+        $scope.useValueStr = $scope.useValue.toString();
 
         template = $scope.model.config.fallbackTemplate;
 
