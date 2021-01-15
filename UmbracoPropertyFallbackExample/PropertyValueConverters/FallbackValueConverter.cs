@@ -82,7 +82,7 @@ namespace UmbracoPropertyFallbackExample.PropertyValueConverters
                     var value = property.GetValue();
                     if (value != null && value is string strValue)
                     {
-                        dictionary[$"{node.Id}{property.Alias}"] = strValue;
+                        dictionary[$"{node.Id}:{property.Alias}"] = strValue;
                     }
                 }
             }
