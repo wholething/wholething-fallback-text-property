@@ -35,7 +35,7 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
+    packagesToPack: '**/Wholething.FallbackTextProperty.nuspec'
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
