@@ -32,11 +32,14 @@ steps:
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
 - task: NuGetCommand@2
   inputs:
     command: 'pack'
-    packagesToPack: 'Wholething.FallbackTextProperty/*.csproj'
+    packagesToPack: '**/*.csproj'
+    versioningScheme: 'off'
+  inputs:
+    command: 'pack'
+    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
     versioningScheme: byPrereleaseNumber
     majorVersion: '$(Major)'
     minorVersion: '$(Minor)'
