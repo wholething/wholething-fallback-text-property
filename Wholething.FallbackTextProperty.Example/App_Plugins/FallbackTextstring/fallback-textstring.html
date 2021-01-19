@@ -18,6 +18,6 @@
                          on-change="onUseValueChange()">
         </umb-radiobutton>
 
-        <input ng-if="useValue" type="text" ng-model="model.value" ng-required="useValue" ng-trim="false" class="umb-property-editor umb-textstring" />
+        <input ng-disabled="!useValue" type="text" ng-model="value" ng-change="onValueChange()" ng-required="useValue" ng-trim="false" class="umb-property-editor umb-textstring" />
     </div>
 </div>

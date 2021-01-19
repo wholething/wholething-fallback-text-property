@@ -3,5 +3,13 @@
 }
 
 .fallback-textstring.use-value .fallback input {
-    opacity: 0.6;
+    opacity: 0.5;
+}
+
+.fallback-textstring .value input {
+    opacity: 0.5;
+}
+
+.fallback-textstring.use-value .value input {
+    opacity: 1;
 }
