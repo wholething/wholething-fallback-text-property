@@ -10,7 +10,7 @@ using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
-namespace  Wholething.FallbackTextProperty.Example.PropertyValueConverters
+namespace  $rootnamespace$.PropertyValueConverters
 {
     public class FallbackValueConverter : IPropertyValueConverter
     {
