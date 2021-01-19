@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using HandlebarsDotNet;
-using Newtonsoft.Json;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Services;
-using Umbraco.Web;
 
 namespace  Wholething.FallbackTextProperty.Example.PropertyValueConverters
 {
