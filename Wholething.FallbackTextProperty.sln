@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wholething.FallbackTextProperty.Example", "UmbracoPropertyFallbackExample\Wholething.FallbackTextProperty.Example.csproj", "{08D191C0-A075-47D7-A802-A97010BDAB31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wholething.FallbackTextProperty.Example", "Wholething.FallbackTextProperty.Example\Wholething.FallbackTextProperty.Example.csproj", "{08D191C0-A075-47D7-A802-A97010BDAB31}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{E3C1DE51-27D8-4BDD-83B4-4D85E40FBA6C}"
 	ProjectSection(SolutionItems) = preProject
