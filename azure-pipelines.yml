@@ -13,9 +13,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  major: '0'
-  minor: '0'
-  patch: '1'
+  Major: '0'
+  Minor: '0'
+  Patch: '1'
 
 steps:
 - task: NuGetToolInstaller@1
@@ -40,9 +40,9 @@ steps:
     command: 'pack'
     packagesToPack: '**/*.csproj'
     versioningScheme: byPrereleaseNumber
-    majorVersion: '$(major)'
-    minorVersion: '$(minor)'
-    patchVersion: '$(patch)'
+    majorVersion: '$(Major)'
+    minorVersion: '$(Minor)'
+    patchVersion: '$(Patch)'
     
 # - task: NuGetAuthenticate@0
 #   displayName: 'NuGet Authenticate'
