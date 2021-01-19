@@ -1,8 +1,12 @@
-# Textstring with Fallback
+# Wholething Textstring with Fallback
 
 This repository is a simple example of how to achieve a proper "fallback value" for an Umbraco field, including building that fallback from other node properties and properties of other specific nodes in the content tree.
 
 The included example project uses the default Umbraco starter-kit and there are minimal changes.
+
+## Team
+
+This property editor is a collaboration between [Harry Gordon](https://www.linkedin.com/in/hejgordon/) and Wholething ([Dean Leigh](https://www.linkedin.com/in/deanleigh/?) and [Ault Nathanielsz](https://www.linkedin.com/in/ault-nathanielsz-01725b13/)).
 
 ## Configuration and editor experience
 
