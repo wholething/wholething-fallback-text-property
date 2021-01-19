@@ -24,6 +24,7 @@ steps:
   displayName: 'NuGet restore'
   inputs:
     restoreSolution: '$(solution)'
+    nugetConfigPath: 'nuget.config'
 
 - task: MSBuild@1
   inputs:
