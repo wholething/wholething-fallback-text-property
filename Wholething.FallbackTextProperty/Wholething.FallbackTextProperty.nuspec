@@ -9,7 +9,7 @@
     <description>FallbackTextProperty is a simple Umbraco property editor that defines a fallback/default value that users can optionally override.</description>
   </metadata>
   <files>
-    <file src="Templates\PropertyValueConverter\*.*" target="content\PropertyValueConverter\" />
+    <file src="Templates\PropertyValueConverters\*.*" target="content\PropertyValueConverter\" />
     <file src="Plugins\FallbackTextstring\*.*" target="content\App_Plugins\FallbackTextstring\" />
   </files>
 </package>
