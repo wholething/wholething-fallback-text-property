@@ -46,7 +46,6 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
-    versioningScheme: byBuildNumber
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
