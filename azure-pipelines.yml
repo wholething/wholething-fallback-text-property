@@ -41,7 +41,7 @@ steps:
   displayName: 'NuGet pack'
   inputs:
     command: 'pack'
-    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
+    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
     
 # - task: NuGetAuthenticate@0
 #   displayName: 'NuGet Authenticate'
