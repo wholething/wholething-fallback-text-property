@@ -9,12 +9,15 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  Major: '0'
+  Minor: '0'
+  Patch: '1'
+
 steps:
-
-- task: VSBuild@1
-  inputs:
-    solution: '**\*.sln'
-
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
@@ -22,10 +25,10 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-- task: MSBuild@1
+- task: VSBuild@1
   inputs:
     solution: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
-    msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
@@ -34,6 +37,7 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
+    versioningScheme: byBuildNumber
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
