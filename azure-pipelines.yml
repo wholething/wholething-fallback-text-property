@@ -32,26 +32,11 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# - task: VSBuild@1
-#   inputs:
-#     solution: '$(solution)'
-#     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-
-# - task: VSTest@2
-#   inputs:
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
-    
-# - task: NuGetAuthenticate@0
-#   displayName: 'NuGet Authenticate'
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
