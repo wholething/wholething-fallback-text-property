@@ -32,19 +32,12 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# - task: VSTest@2
-#   inputs:
-#     platform: '$(buildPlatform)'
-#     configuration: '$(buildConfiguration)'
-
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
-    
-# - task: NuGetAuthenticate@0
-#   displayName: 'NuGet Authenticate'
+    versioningScheme: byBuildNumber
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
