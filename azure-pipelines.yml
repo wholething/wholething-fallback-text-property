@@ -38,7 +38,7 @@ steps:
 #     configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
-displayName: 'NuGet pack'
+  displayName: 'NuGet pack'
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
