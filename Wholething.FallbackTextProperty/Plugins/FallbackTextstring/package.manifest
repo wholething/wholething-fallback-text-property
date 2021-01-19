@@ -1,0 +1,29 @@
+{
+  "propertyEditors": [
+    {
+      "alias": "FallbackTextstring",
+      "name": "Textstring with fallback",
+      "icon": "icon-edit",
+      "group": "Rich Content",
+      "editor": {
+        "view": "~/App_Plugins/FallbackTextstring/fallback-textstring.html"
+      },
+      "prevalues": {
+        "fields": [
+          {
+            "label": "Fallback Template",
+            "description": "If value is blank, the editor will compose a fallback value using this Mustache template. The template can refer to node properties (e.g. \"{{pageTitle}}\") or properties from other nodes by node ID (e.g. \"{{1234:heroTitle}}\")",
+            "key": "fallbackTemplate",
+            "view": "textstring" 
+          }
+        ]
+      }
+    }
+  ],
+  "javascript": [
+    "~/App_Plugins/FallbackTextstring/fallback-textstring.controller.js"
+  ],
+  "css": [
+    "~/App_Plugins/FallbackTextstring/fallback-textstring.css"
+  ]
+}
