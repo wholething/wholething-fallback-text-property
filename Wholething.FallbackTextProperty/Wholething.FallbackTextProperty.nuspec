@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>Wholething.FallbackTextProperty</id>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <title>Wholething.FallbackTextProperty</title>
     <authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,4 +12,7 @@
     <file src="Templates\PropertyValueConverters\**" target="content\PropertyValueConverters\" />
     <file src="Plugins\FallbackTextstring\**" target="content\App_Plugins\FallbackTextstring\" />
   </files>
+  <dependencies>
+    <dependency id="Handlebars.Net" version="2.0.4" />
+  </dependencies>
 </package>
