@@ -21,6 +21,7 @@ steps:
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
+  displayName: 'NuGet restore'
   inputs:
     restoreSolution: '$(solution)'
 
@@ -37,6 +38,7 @@ steps:
 #     configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
+displayName: 'NuGet pack'
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
@@ -48,5 +50,7 @@ steps:
   displayName: 'NuGet push'
   inputs:
     command: push
-    publishVstsFeed: '<feed>'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    nuGetFeedType: 'internal'
+    publishVstsFeed: '57444a6e-91e5-4e59-8089-86a3c7cefaee'
     allowPackageConflicts: true
