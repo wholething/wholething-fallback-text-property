@@ -273,10 +273,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.controller.js" />
     <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.css" />
     <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.html" />
-    <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.controller.js" />
-    <Content Include="App_Plugins\FallbackTextstring\lib\mustache.min.js" />
     <Content Include="App_Plugins\OsmMaps\assets\css\osmmaps.css" />
     <Content Include="App_Plugins\OsmMaps\assets\leaflet\images\layers-2x.png" />
     <Content Include="App_Plugins\OsmMaps\assets\leaflet\images\layers.png" />
@@ -355,6 +354,7 @@
     <Compile Include="App_Data\Models\Product.generated.cs" />
     <Compile Include="App_Data\Models\Products.generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyValueConverter\FallbackValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\imageprocessor\security.config" />

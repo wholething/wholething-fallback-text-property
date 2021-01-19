@@ -8,6 +8,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{E3C1DE51-27D8-4BDD-83B4-4D85E40FBA6C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
 EndProject
