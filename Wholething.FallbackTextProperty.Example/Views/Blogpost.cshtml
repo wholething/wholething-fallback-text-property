@@ -1,4 +1,4 @@
-﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<Blogpost>
+﻿@inherits Umbraco.Web.Mvc.UmbracoViewPage<ContentModels.Blogpost>
 @using ContentModels = Umbraco.Web.PublishedModels;
     @{
     Layout = "master.cshtml";
@@ -15,6 +15,7 @@
                 </span>
             </div>
             <h3>@Model.Excerpt</h3>
+            @Html.GetGridHtml(Model, "bodyText", "bootstrap3-fluid")
             <p>@Model.SeoMetaTitle</p>
             <!-- todo: implement discus comments -->
         </article>

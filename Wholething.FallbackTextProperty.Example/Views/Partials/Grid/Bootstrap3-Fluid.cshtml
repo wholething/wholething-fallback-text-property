@@ -6,7 +6,7 @@
     Razor helpers located at the bottom of this file
 *@
 
-@if (Model != null && Model.sections != null)
+@*@if (Model != null && Model.sections != null)
 {
     var oneColumn = ((System.Collections.ICollection)Model.sections).Count == 1;
 
@@ -34,7 +34,7 @@
             </div>
         }
     </div>
-}
+}*@
 
 @helper renderRow(dynamic row){
     <div @RenderElementAttributes(row)>

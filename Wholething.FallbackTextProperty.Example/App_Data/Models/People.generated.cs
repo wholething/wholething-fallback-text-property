@@ -80,7 +80,7 @@ namespace Umbraco.Web.PublishedModels
 		public string SeoMetaDescription => global::Umbraco.Web.PublishedModels.NavigationBase.GetSeoMetaDescription(this);
 
 		///<summary>
-		/// Title: An example property that I added to demonstrate the textstring fallback field.
+		/// Title: An example use of FallbackTextProperty
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
 		[ImplementPropertyType("seoMetaTitle")]

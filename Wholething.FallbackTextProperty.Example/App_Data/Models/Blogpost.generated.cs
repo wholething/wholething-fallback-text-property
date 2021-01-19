@@ -45,13 +45,6 @@ namespace Umbraco.Web.PublishedModels
 		// properties
 
 		///<summary>
-		/// Block Example
-		///</summary>
-		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
-		[ImplementPropertyType("blockExample")]
-		public global::Umbraco.Core.Models.Blocks.BlockListModel BlockExample => this.Value<global::Umbraco.Core.Models.Blocks.BlockListModel>("blockExample");
-
-		///<summary>
 		/// Content
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
@@ -94,7 +87,7 @@ namespace Umbraco.Web.PublishedModels
 		public string SeoMetaDescription => global::Umbraco.Web.PublishedModels.NavigationBase.GetSeoMetaDescription(this);
 
 		///<summary>
-		/// Title: An example property that I added to demonstrate the textstring fallback field.
+		/// Title: An example use of FallbackTextProperty
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
 		[ImplementPropertyType("seoMetaTitle")]
