@@ -34,6 +34,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         $scope.useValue = $scope.model.value != null && $scope.model.value.length > 0;
         $scope.useValueStr = $scope.useValue.toString();
 
+        $scope.value = $scope.model.value;
+
         template = $scope.model.config.fallbackTemplate;
 
         // Add current node to the template dictionary
