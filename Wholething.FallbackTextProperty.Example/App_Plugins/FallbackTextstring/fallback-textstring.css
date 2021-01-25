@@ -2,14 +2,14 @@
     margin-bottom: 10px;
 }
 
-.fallback-textstring.use-value .fallback input {
+.fallback-textstring.use-value .fallback .umb-textstring {
     opacity: 0.5;
 }
 
-.fallback-textstring .value input {
+.fallback-textstring .value .umb-textstring {
     opacity: 0.5;
 }
 
-.fallback-textstring.use-value .value input {
+.fallback-textstring.use-value .value .umb-textstring {
     opacity: 1;
 }
