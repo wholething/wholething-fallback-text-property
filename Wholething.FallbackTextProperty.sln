@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{E3
 		azure-pipelines.yml = azure-pipelines.yml
 		nuget.config = nuget.config
 		README.md = README.md
+		syncPluginToPackage.bat = syncPluginToPackage.bat
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wholething.FallbackTextProperty", "Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj", "{787DFF91-25A8-47C7-9008-E6B6ACF4E8CC}"
