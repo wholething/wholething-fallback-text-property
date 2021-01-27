@@ -2,7 +2,8 @@
 <package>
   <metadata>
     <id>Wholething.FallbackTextProperty</id>
-    <version>0.0.4</version>
+    <!-- This version number is not in use but is up-to-date -->
+    <version>0.1</version>
     <title>Wholething.FallbackTextProperty</title>
     <authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
