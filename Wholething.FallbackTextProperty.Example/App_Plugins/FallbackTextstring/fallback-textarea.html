@@ -1,5 +1,5 @@
 ﻿<div ng-controller="FallbackTextstringController" class="fallback-textstring" ng-class="{'use-value': useValue}">
-    <ng-form name="fallbackTextstringForm">
+    <ng-form name="fallbackTextareaForm">
 
         <div class="fallback">
             <umb-radiobutton name="useValueRadio-{{model.alias}}"
@@ -8,7 +8,13 @@
                              text="Default"
                              on-change="onUseValueChange()">
             </umb-radiobutton>
-            <input type="text" ng-model="fallback" ng-trim="false" class="umb-property-editor umb-textstring" disabled="disabled" />
+
+            <textarea ng-model="fallback"
+                      rows="{{model.config.rows || 10}}"
+                      class="umb-property-editor umb-textarea umb-textstring"
+                      ng-trim="false"
+                      disabled="disabled">
+            </textarea>
         </div>
 
         <div class="value">
@@ -19,7 +25,17 @@
                              on-change="onUseValueChange()">
             </umb-radiobutton>
 
-            <input name="text" ng-disabled="!useValue" type="text" ng-model="value" ng-keyup="change()" ng-required="useValue" ng-trim="false" class="umb-property-editor umb-textstring" />
+            <textarea id="{{model.alias}}"
+                      name="text"
+                      ng-disabled="!useValue"
+                      ng-model="value"
+                      ng-keyup="change()"
+                      ng-required="useValue"
+                      val-server="value"
+                      rows="{{model.config.rows || 10}}"
+                      class="umb-property-editor umb-textarea umb-textstring"
+                      ng-trim="false">
+            </textarea>
 
             <div ng-messages="textboxFieldForm.textbox.$error" show-validation-on-submit>
                 <p class="sr-only" ng-message="valServer" tabindex="0">{{model.label}} {{fallbackTextareaForm.text.errorMsg}}</p>

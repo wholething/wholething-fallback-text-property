@@ -4,9 +4,10 @@
       "alias": "FallbackTextstring",
       "name": "Textstring with fallback",
       "icon": "icon-edit",
-      "group": "Rich Content",
+      "group": "Common",
       "editor": {
-        "view": "~/App_Plugins/FallbackTextstring/fallback-textstring.html"
+        "view": "~/App_Plugins/FallbackTextstring/fallback-textstring.html",
+        "valueType": "STRING"
       },
       "prevalues": {
         "fields": [
@@ -14,7 +15,45 @@
             "label": "Fallback Template",
             "description": "If value is blank, the editor will compose a fallback value using this Mustache template. The template can refer to node properties (e.g. \"{{pageTitle}}\") or properties from other nodes by node ID (e.g. \"{{1234:heroTitle}}\")",
             "key": "fallbackTemplate",
-            "view": "textstring" 
+            "view": "textstring"
+          },
+          {
+            "label": "Maximum allowed characters",
+            "description": "If empty - no character limit",
+            "key": "maxChars",
+            "view": "number"
+          }
+        ]
+      }
+    },
+    {
+      "alias": "FallbackTextarea",
+      "name": "Textarea with fallback",
+      "icon": "icon-edit",
+      "group": "Common",
+      "editor": {
+        "view": "~/App_Plugins/FallbackTextstring/fallback-textarea.html",
+        "valueType": "TEXT"
+      },
+      "prevalues": {
+        "fields": [
+          {
+            "label": "Fallback Template",
+            "description": "If value is blank, the editor will compose a fallback value using this Mustache template. The template can refer to node properties (e.g. \"{{pageTitle}}\") or properties from other nodes by node ID (e.g. \"{{1234:heroTitle}}\")",
+            "key": "fallbackTemplate",
+            "view": "textarea"
+          },
+          {
+            "label": "Maximum allowed characters",
+            "description": "If empty - no character limit",
+            "key": "maxChars",
+            "view": "number"
+          },
+          {
+            "label": "Number of rows",
+            "description": "If empty - 10 rows would be set as the default value",
+            "key": "rows",
+            "view": "number"
           }
         ]
       }

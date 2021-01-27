@@ -5,6 +5,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     var templateDictionary = {};
     var template;
 
+    var form = null;
+
     assetsService
         .load([
             '~/App_Plugins/FallbackTextstring/lib/mustache.min.js'
@@ -13,8 +15,20 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             init();
         });
 
-    $scope.onValueChange = function () {
+    $scope.change = function () {
         $scope.model.value = $scope.value;
+
+        if ($scope.model.value) {
+            $scope.charsCount = $scope.model.value.length;
+            checkLengthValidity();
+            $scope.nearMaxLimit = $scope.validLength && $scope.charsCount > Math.max($scope.maxChars * .8, $scope.maxChars - 25);
+
+            if ($scope.validLength === true) {
+                form.text.$setValidity("maxChars", true);
+            } else {
+                form.text.$setValidity("maxChars", false);
+            }
+        }
     };
 
     $scope.onUseValueChange = function () {
@@ -29,6 +43,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             $scope.model.value = $scope.value;
         }
     };
+    
+    $scope.model.onValueChanged = $scope.change;
 
     function init() {
         $scope.useValue = $scope.model.value != null && $scope.model.value.length > 0;
@@ -37,6 +53,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         $scope.value = $scope.model.value;
 
         template = $scope.model.config.fallbackTemplate;
+
+        initForm();
 
         // Add current node to the template dictionary
         addToDictionary(editorState.getCurrent());
@@ -59,6 +77,31 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         Promise.all(promises).then(() => {
             updateFallbackValue();
         });
+    }
+
+    function initForm() {
+        form = $scope.fallbackTextareaForm || $scope.fallbackTextstringForm;
+
+        var isTextstring = !!$scope.fallbackTextstringForm;
+
+        // macro parameter editor doesn't contains a config object,
+        // so we create a new one to hold any properties
+        if (!$scope.model.config) {
+            $scope.model.config = {};
+        }
+
+        if (isTextstring) {
+            // 512 is the maximum number that can be stored
+            // in the database, so set it to the max, even
+            // if no max is specified in the config
+            $scope.maxChars = Math.min($scope.model.config.maxChars || 512, 512);
+        } else {
+            $scope.maxChars = $scope.model.config.maxChars;
+        }
+
+        $scope.charsCount = 0;
+        $scope.nearMaxLimit = false;
+        $scope.validLength = true;
     }
 
     function updateFallbackValue() {
@@ -85,5 +128,9 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         }
 
         return nodeIds;
+    }
+
+    function checkLengthValidity() {
+        $scope.validLength = $scope.charsCount <= $scope.maxChars;
     }
 }]);

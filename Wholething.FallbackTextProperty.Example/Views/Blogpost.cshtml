@@ -16,7 +16,10 @@
             </div>
             <h3>@Model.Excerpt</h3>
             @Html.GetGridHtml(Model, "bodyText", "bootstrap3-fluid")
+            <h3>SEO Meta Title</h3>
             <p>@Model.SeoMetaTitle</p>
+            <h3>SEO Meta Description</h3>
+            <p>@Model.SeoMetaDescription</p>
             <!-- todo: implement discus comments -->
         </article>
     </div>

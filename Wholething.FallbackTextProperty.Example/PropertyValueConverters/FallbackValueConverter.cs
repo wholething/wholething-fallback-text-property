@@ -22,7 +22,7 @@ namespace  Wholething.FallbackTextProperty.Example.PropertyValueConverters
 
         public bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias == "FallbackTextstring";
+            return propertyType.EditorAlias == "FallbackTextstring" || propertyType.EditorAlias == "FallbackTextarea";
         }
 
         public bool? IsValue(object value, PropertyValueLevel level)
