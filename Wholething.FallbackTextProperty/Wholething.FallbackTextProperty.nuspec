@@ -7,11 +7,12 @@
     <title>Wholething.FallbackTextProperty</title>
     <authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>FallbackTextProperty is a simple Umbraco property editor that defines a fallback/default value that users can optionally override.</description>
+    <description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</description>
     <dependencies>
       <dependency id="UmbracoCms" version="[8.0,9.0)" />
       <dependency id="Handlebars.Net" version="2.0.4" />
     </dependencies>
+    <license>MIT</license>
   </metadata>
   <files>
     <file src="Templates\PropertyValueConverters\**" target="content\PropertyValueConverters\" />
