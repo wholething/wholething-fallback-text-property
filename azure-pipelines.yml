@@ -15,7 +15,7 @@ variables:
   buildConfiguration: 'Release'
   major: 0
   minor: 1
-  patch: $[counter(variables['minor'], 0)] #this will reset when we bump minor
+  patch: $[counter(variables['minor'], 0)] # this will reset when we bump minor
   NugetVersion: $(major).$(minor).$(patch)
 
 steps:
@@ -28,12 +28,6 @@ steps:
     restoreSolution: '**/*.sln'
     feedsToUse: 'select'
     vstsFeed: 'b4b8b301-4ace-4256-ac3f-157fab01270d/64c08c39-afb1-4c5c-88bc-d8492ccb47f3'
-
-# - task: NuGetCommand@2
-#   displayName: 'NuGet restore'
-#   inputs:
-#     restoreSolution: '$(solution)'
-#     nugetConfigPath: 'nuget.config'
 
 - task: MSBuild@1
   inputs:
