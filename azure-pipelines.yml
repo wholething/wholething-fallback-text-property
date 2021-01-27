@@ -13,9 +13,10 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  Major: '0'
-  Minor: '0'
-  Patch: '1'
+  major: 0
+  minor: 1
+  patch: $[counter(variables['minor'], 0)] #this will reset when we bump minor
+  NugetVersion: $(major).$(minor).$(patch)
 
 steps:
 
@@ -46,6 +47,8 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.nuspec'
+    versioningScheme: 'byEnvVar'
+    versionEnvVar: 'NugetVersion'
 
 - task: NuGetCommand@2
   displayName: 'NuGet push'
