@@ -2,7 +2,11 @@
 
 This Umbraco package provides two custom text property editors that allow developers to enter "fallback value", rendered from a Mustache template. The fallback can be built from other node properties and properties of other specific nodes in the content tree.
 
-The included example project uses the default Umbraco starter-kit and there are minimal changes.
+If you like this property editor you may also like [Wholething.FallbackImagePickerProperty](https://github.com/harry-gordon/wholething-fallback-image-picker-property).
+
+## Use-case
+
+The use-case for this package is simple: editors often want the option to override images/values but it is unclear what the default value is. We feel it's a significant improvement in experience for editors to be able to see the default value before deciding to override it.
 
 ## Team
 
