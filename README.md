@@ -10,7 +10,7 @@ This property editor is a collaboration between [Harry Gordon](https://www.linke
 
 ## Installation
 
-You can find the package on NuGet: https://www.nuget.org/packages/Wholething.FallbackTextProperty/0.1.6
+You can find the package on NuGet: https://www.nuget.org/packages/Wholething.FallbackTextProperty/
 
 ## Configuration and editor experience
 
