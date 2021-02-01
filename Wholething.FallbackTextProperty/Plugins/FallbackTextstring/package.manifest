@@ -2,7 +2,7 @@
   "propertyEditors": [
     {
       "alias": "FallbackTextstring",
-      "name": "Textstring with fallback",
+      "name": "Textstring with Fallback",
       "icon": "icon-edit",
       "group": "Common",
       "editor": {
@@ -28,7 +28,7 @@
     },
     {
       "alias": "FallbackTextarea",
-      "name": "Textarea with fallback",
+      "name": "Textarea with Fallback",
       "icon": "icon-edit",
       "group": "Common",
       "editor": {
