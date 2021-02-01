@@ -15,10 +15,6 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             init();
         });
 
-    $scope.$on("formSubmitting", function () {
-        console.log($scope);
-    });
-
     $scope.change = function () {
         $scope.model.value = $scope.value;
 
