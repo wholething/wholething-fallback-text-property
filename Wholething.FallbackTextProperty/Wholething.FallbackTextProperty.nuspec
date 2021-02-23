@@ -8,6 +8,9 @@
     <authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</description>
+    <releaseNotes>
+      Fixed an issue with empty character count config causing incorrect behaviour.
+    </releaseNotes>
     <dependencies>
       <dependency id="UmbracoCms" version="[8.0,9.0)" />
       <dependency id="Handlebars.Net" version="2.0.4" />

@@ -131,6 +131,6 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function checkLengthValidity() {
-        $scope.validLength = $scope.charsCount <= $scope.maxChars;
+        $scope.validLength = $scope.maxChars ? $scope.charsCount <= $scope.maxChars : true;
     }
 }]);

@@ -15,10 +15,6 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             init();
         });
 
-    $scope.$on("formSubmitting", function () {
-        console.log($scope);
-    });
-
     $scope.change = function () {
         $scope.model.value = $scope.value;
 
@@ -135,6 +131,6 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function checkLengthValidity() {
-        $scope.validLength = $scope.charsCount <= $scope.maxChars;
+        $scope.validLength = $scope.maxChars ? $scope.charsCount <= $scope.maxChars : true;
     }
 }]);
