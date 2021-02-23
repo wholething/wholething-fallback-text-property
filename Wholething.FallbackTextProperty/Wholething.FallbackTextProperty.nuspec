@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</description>
     <releaseNotes>
-      Fixed an issue with empty character count config causing incorrect behaviour.
+      Added a config option "Allow None" which adds a "None" option which sets the field to empty
     </releaseNotes>
     <dependencies>
       <dependency id="UmbracoCms" version="[8.0,9.0)" />

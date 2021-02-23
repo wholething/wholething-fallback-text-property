@@ -51,6 +51,11 @@ namespace $rootnamespace$.PropertyValueConverters
         {
             var value = source as string;
 
+            if (value == "<none>")
+            {
+                return string.Empty;
+            }
+
             if (!string.IsNullOrWhiteSpace(value))
             {
                 return value;

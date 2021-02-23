@@ -22,6 +22,12 @@
             "description": "If empty - no character limit",
             "key": "maxChars",
             "view": "number"
+          },
+          {
+            "label": "Allow none",
+            "description": "Add an explicit option for \"None\" which sets the field to empty",
+            "key": "allowNone",
+            "view": "boolean"
           }
         ]
       }
@@ -54,6 +60,12 @@
             "description": "If empty - 10 rows would be set as the default value",
             "key": "rows",
             "view": "number"
+          },
+          {
+            "label": "Allow none",
+            "description": "Add an explicit option for \"None\" which sets the field to empty",
+            "key": "allowNone",
+            "view": "boolean"
           }
         ]
       }
