@@ -54,7 +54,7 @@
 
         <div class="none" ng-show="allowNone">
             <umb-radiobutton name="useValueRadio-{{model.alias}}"
-                             value="<none>"
+                             value="{{noneValue}}"
                              model="useValueStr"
                              text="None"
                              on-change="onUseValueChange()">
