@@ -61,9 +61,7 @@ namespace Wholething.FallbackTextProperty.Example.PropertyValueConverters
                 return value;
             }
 
-            var dataType = _dataTypeService.GetByEditorAlias(propertyType.EditorAlias).First();
-
-            var template = (string) ((Dictionary<string, object>) dataType.Configuration)["fallbackTemplate"];
+            var template = (string) ((Dictionary<string, object>) propertyType.DataType.Configuration)["fallbackTemplate"];
 
             var dictionary = new Dictionary<string, string>();
 

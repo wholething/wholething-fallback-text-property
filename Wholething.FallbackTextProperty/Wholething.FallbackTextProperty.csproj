@@ -44,7 +44,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Content Include="Plugins\FallbackTextstring\package.manifest" />
     <None Include="Wholething.FallbackTextProperty.nuspec" />
-    <None Include="Templates\PropertyValueConverters\FallbackValueConverter.cs.pp" />
+    <None Include="Templates\ValueConverters\FallbackValueConverter.cs.pp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Plugins\FallbackTextstring\fallback-textstring.controller.js" />

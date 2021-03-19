@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</description>
     <releaseNotes>
-      Added a config option "Allow None" which adds a "None" option which sets the field to empty
+      Fixed an issue that caused the value converter to sometimes use the wrong fallback template.
     </releaseNotes>
     <dependencies>
       <dependency id="UmbracoCms" version="[8.0,9.0)" />
@@ -18,7 +18,7 @@
     <license type="expression">MIT</license>
   </metadata>
   <files>
-    <file src="Templates\PropertyValueConverters\**" target="content\PropertyValueConverters\" />
+    <file src="Templates\ValueConverters\**" target="content\ValueConverters\" />
     <file src="Plugins\FallbackTextstring\**" target="content\App_Plugins\FallbackTextstring\" />
   </files>
 </package>
