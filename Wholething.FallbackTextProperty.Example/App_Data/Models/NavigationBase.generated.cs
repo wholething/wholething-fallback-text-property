@@ -23,6 +23,10 @@ namespace Umbraco.Web.PublishedModels
 	/// <summary>Navigation Base</summary>
 	public partial interface INavigationBase : IPublishedContent
 	{
+		/// <summary>Fallback to Fallback Test</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
+		string FallbackToFallbackTest { get; }
+
 		/// <summary>Keywords</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
 		global::System.Collections.Generic.IEnumerable<string> Keywords { get; }
@@ -64,6 +68,17 @@ namespace Umbraco.Web.PublishedModels
 		{ }
 
 		// properties
+
+		///<summary>
+		/// Fallback to Fallback Test: This is an example of a field that falls back to a fallback.  Note that at present this does not work.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
+		[ImplementPropertyType("fallbackToFallbackTest")]
+		public string FallbackToFallbackTest => GetFallbackToFallbackTest(this);
+
+		/// <summary>Static getter for Fallback to Fallback Test</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
+		public static string GetFallbackToFallbackTest(INavigationBase that) => that.Value<string>("fallbackToFallbackTest");
 
 		///<summary>
 		/// Keywords: Keywords that describe the content of the page. This is considered optional since most modern search engines don't use this anymore

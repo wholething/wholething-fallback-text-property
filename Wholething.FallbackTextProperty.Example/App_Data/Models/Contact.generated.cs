@@ -87,6 +87,13 @@ namespace Umbraco.Web.PublishedModels
 		public string PageTitle => this.Value<string>("pageTitle");
 
 		///<summary>
+		/// Fallback to Fallback Test: This is an example of a field that falls back to a fallback.  Note that at present this does not work.
+		///</summary>
+		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
+		[ImplementPropertyType("fallbackToFallbackTest")]
+		public string FallbackToFallbackTest => global::Umbraco.Web.PublishedModels.NavigationBase.GetFallbackToFallbackTest(this);
+
+		///<summary>
 		/// Keywords: Keywords that describe the content of the page. This is considered optional since most modern search engines don't use this anymore
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "8.10.1")]
