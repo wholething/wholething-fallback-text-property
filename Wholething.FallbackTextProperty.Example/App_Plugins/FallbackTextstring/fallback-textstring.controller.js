@@ -7,6 +7,9 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
 
     var form = null;
 
+    var noneValue = '<none>';
+    $scope.noneValue = noneValue;
+
     assetsService
         .load([
             '~/App_Plugins/FallbackTextstring/lib/mustache.min.js'
@@ -35,9 +38,14 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         // Annoyingly radio button value is a string
         $scope.useValue = $scope.useValueStr === 'true';
 
+        $scope.none = $scope.useValueStr === noneValue;
+
         // If we are switching from custom to default let's "shelve" the custom value 
         // but bring it back if they go the other way
-        if (!$scope.useValue) {
+        if ($scope.none) {
+            $scope.model.value = noneValue;
+            $scope.useValue = null;
+        } else if (!$scope.useValue) {
             $scope.model.value = null;
         } else {
             $scope.model.value = $scope.value;
@@ -47,10 +55,24 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     $scope.model.onValueChanged = $scope.change;
 
     function init() {
-        $scope.useValue = $scope.model.value != null && $scope.model.value.length > 0;
-        $scope.useValueStr = $scope.useValue.toString();
+        $scope.allowNone = $scope.model.config.allowNone === '1';
 
-        $scope.value = $scope.model.value;
+        $scope.none = $scope.model.value === noneValue;
+
+        // If the value is none but the field doesn't support it
+        if (!$scope.allowNone && $scope.none) {
+            $scope.none = false;
+            $scope.model.value = null;
+        }
+
+        if ($scope.none) {
+            $scope.useValue = null;
+            $scope.useValueStr = noneValue;
+        } else {
+            $scope.useValue = $scope.model.value != null && $scope.model.value.length > 0;
+            $scope.useValueStr = $scope.useValue.toString();
+            $scope.value = $scope.model.value;
+        }
 
         template = $scope.model.config.fallbackTemplate;
 

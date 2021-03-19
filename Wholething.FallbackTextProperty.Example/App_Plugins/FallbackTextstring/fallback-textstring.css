@@ -1,8 +1,10 @@
-﻿.fallback-textstring .fallback {
+﻿.fallback-textstring .fallback,
+.fallback-textstring .value {
     margin-bottom: 10px;
 }
 
-.fallback-textstring.use-value .fallback .umb-textstring {
+.fallback-textstring.use-value .fallback .umb-textstring,
+.fallback-textstring.none .fallback .umb-textstring {
     opacity: 0.5;
 }
 
