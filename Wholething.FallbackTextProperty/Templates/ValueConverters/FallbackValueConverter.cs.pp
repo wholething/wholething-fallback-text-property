@@ -7,7 +7,7 @@ using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Services;
 
-namespace $rootnamespace$.PropertyValueConverters
+namespace $rootnamespace$.ValueConverters
 {
     public class FallbackValueConverter : IPropertyValueConverter
     {
@@ -105,7 +105,7 @@ namespace $rootnamespace$.PropertyValueConverters
             return compiled(dictionary); 
         }
 
-        private List<int> GetOtherNodeIds(string template)
+        private List<int> GetReferencedNodes(string template)
         {
             var regex = new Regex(@"([0-9]+):");
             var matches = regex.Matches(template);

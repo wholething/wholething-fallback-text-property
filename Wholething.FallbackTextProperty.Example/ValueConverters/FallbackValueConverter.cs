@@ -7,7 +7,7 @@ using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Services;
 
-namespace Wholething.FallbackTextProperty.Example.PropertyValueConverters
+namespace Wholething.FallbackTextProperty.Example.ValueConverters
 {
     public class FallbackValueConverter : IPropertyValueConverter
     {
