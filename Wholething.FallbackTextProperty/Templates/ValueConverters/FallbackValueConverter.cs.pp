@@ -65,6 +65,11 @@ namespace $rootnamespace$.PropertyValueConverters
 
             var dictionary = new Dictionary<string, string>();
 
+            if (owner is IPublishedContent node)
+            {
+                dictionary.Add("name", node.Name);
+            }
+
             foreach (var publishedProperty in owner.Properties)
             {
                 var propertyValue = publishedProperty.GetSourceValue();
@@ -74,21 +79,23 @@ namespace $rootnamespace$.PropertyValueConverters
                 }
             }
 
-            var otherNodeIds = GetOtherNodeIds(template);
-            foreach (var nodeId in otherNodeIds)
+            var referencedNodes = GetReferencedNodes(template);
+            foreach (var referencedNodeId in referencedNodes)
             {
-                var node = _contentService.GetById(nodeId);
+                var referencedNode = _contentService.GetById(referencedNodeId);
 
                 // There is some quirk of the Mustache implementation that means a variable name cannot
                 // start with a number!
-                template = template.Replace($"{nodeId}", $"node{nodeId}");
+                template = template.Replace($"{referencedNodeId}", $"node{referencedNodeId}");
 
-                foreach (var property in node.Properties)
+                dictionary.Add($"node{referencedNode.Id}:name", referencedNode.Name);
+
+                foreach (var property in referencedNode.Properties)
                 {
                     var propertyValue = property.GetValue();
                     if (propertyValue != null && propertyValue is string strValue)
                     {
-                        dictionary[$"node{node.Id}:{property.Alias}"] = strValue;
+                        dictionary[$"node{referencedNode.Id}:{property.Alias}"] = strValue;
                     }
                 }
             }
