@@ -51,7 +51,7 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             $scope.model.value = $scope.value;
         }
     };
-    
+
     $scope.model.onValueChanged = $scope.change;
 
     function init() {
@@ -130,14 +130,19 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         $scope.fallback = Mustache.render(template, templateDictionary);
     }
 
-    function addToDictionary(node, prefix) {
+    function addToDictionary(node, addPrefix) {
+        var prefix = addPrefix ? `${node.id}:` : '';
         var variant = node.variants[0];
+        templateDictionary[buildKey('name', prefix)] = variant.name;
         for (var tab of variant.tabs) {
             for (var property of tab.properties) {
-                var key = prefix ? `${node.id}:${property.alias}` : property.alias;
-                templateDictionary[key] = property.value;
+                templateDictionary[buildKey(property.alias, prefix)] = property.value;
             }
         }
+    }
+
+    function buildKey(alias, prefix) {
+        return `${prefix}${alias}`
     }
 
     function getOtherNodeIds() {
