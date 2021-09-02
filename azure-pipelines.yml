@@ -25,9 +25,6 @@ variables:
 
 steps:
 
-- script: echo "Branch is $(Build.SourceBranch)"
-- script: echo "NugetVersion is $(NugetVersion)"
-
 - task: NuGetToolInstaller@1
 
 - task: NuGetCommand@2
