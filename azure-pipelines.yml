@@ -40,18 +40,18 @@ steps:
     msbuildArguments: '/p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     configuration: '$(buildConfiguration)'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet pack'
+- task: DotNetCoreCLI@2
   inputs:
     command: 'pack'
     packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
+    includesymbols: true
+    includesource: true
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'NugetVersion'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet push'
+- task: DotNetCoreCLI@2
   inputs:
-    command: push
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
     publishVstsFeed: 'b4b8b301-4ace-4256-ac3f-157fab01270d/64c08c39-afb1-4c5c-88bc-d8492ccb47f3'
