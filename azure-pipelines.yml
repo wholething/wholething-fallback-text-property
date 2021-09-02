@@ -39,8 +39,6 @@ steps:
   inputs:
     command: 'pack'
     packagesToPack: '$(packageProject)'
-    includesymbols: true
-    includesource: true
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'NugetVersion'
 
