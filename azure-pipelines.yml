@@ -17,11 +17,11 @@ variables:
   major: 0
   minor: 1
   patch: $[counter(variables['minor'], 0)] # this will reset when we bump minor
-  isFeature: $[startsWith(variables['Build.SourceBranch'], 'feature/')]
-  ${{ if variables['isFeature'] }}: 
-    NugetVersion: $(major).$(minor).$(patch)-pre
-  ${{ if not(variables['isFeature']) }}:
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  ${{ if variables['isMain'] }}:
     NugetVersion: $(major).$(minor).$(patch)
+  ${{ if not(variables['isMain']) }}: 
+    NugetVersion: $(major).$(minor).$(patch)-pre
 
 steps:
 
