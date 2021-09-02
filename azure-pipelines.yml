@@ -3,8 +3,9 @@
 # Add steps that publish symbols, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/aspnet/build-aspnet-4
 
-trigger:
+trigger: 
 - main
+- feature/*
 
 pool:
   vmImage: 'windows-latest'
@@ -16,9 +17,14 @@ variables:
   major: 0
   minor: 1
   patch: $[counter(variables['minor'], 0)] # this will reset when we bump minor
-  NugetVersion: $(major).$(minor).$(patch)-pre
+  isFeature: $[startsWith(variables['Build.SourceBranch'], 'feature/')]
+  ${{ isFeature }}: NugetVersion: $(major).$(minor).$(patch)-pre
+  ${{ not(isFeature) }}: NugetVersion: $(major).$(minor).$(patch)
 
 steps:
+
+- script: echo "Branch is $(Build.SourceBranch)"
+- script: echo "NugetVersion is $(NugetVersion)"
 
 - task: NuGetToolInstaller@1
 
