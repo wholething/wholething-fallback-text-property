@@ -18,8 +18,10 @@ variables:
   minor: 1
   patch: $[counter(variables['minor'], 0)] # this will reset when we bump minor
   isFeature: $[startsWith(variables['Build.SourceBranch'], 'feature/')]
-  ${{ if isFeature }}: NugetVersion: $(major).$(minor).$(patch)-pre
-  ${{ if not(isFeature) }}: NugetVersion: $(major).$(minor).$(patch)
+  ${{ if isFeature }}: 
+    NugetVersion: $(major).$(minor).$(patch)-pre
+  ${{ if not(isFeature) }}:
+    NugetVersion: $(major).$(minor).$(patch)
 
 steps:
 
