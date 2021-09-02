@@ -10,8 +10,7 @@
         <PackageReference Include="Wholething.FallbackTextProperty" Version="0.2.8-pre" />
     </ItemGroup>
 
-
-    <ItemGroup>
+  <ItemGroup>
         <Content Remove="umbraco\Data\**" />
         <Content Remove="umbraco\logs\**" />
         <Content Remove="umbraco\MediaCache\**" />

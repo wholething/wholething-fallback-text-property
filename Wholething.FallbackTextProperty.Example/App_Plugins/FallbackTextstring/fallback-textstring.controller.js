@@ -51,7 +51,7 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             $scope.model.value = $scope.value;
         }
     };
-    
+
     $scope.model.onValueChanged = $scope.change;
 
     function init() {
