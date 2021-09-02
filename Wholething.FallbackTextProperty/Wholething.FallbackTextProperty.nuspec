@@ -11,8 +11,6 @@
     <releaseNotes>
       Package now supports Umbraco 8 and 9 via multi-targeting
     </releaseNotes>
-    <dependencies>
-    </dependencies>
     <license type="expression">MIT</license>
   </metadata>
   <files>

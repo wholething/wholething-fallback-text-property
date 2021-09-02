@@ -5,6 +5,9 @@
 
     <ItemGroup>
         <PackageReference Include="Umbraco.Cms" Version="9.0.0-rc002" />
+        <PackageReference Include="Umbraco.Cms.SqlCe" Version="9.0.0-rc002" />
+        <PackageReference Include="Umbraco.SqlServerCE" Version="4.0.0.1" />
+        <PackageReference Include="Wholething.FallbackTextProperty" Version="0.2.0-pre" />
     </ItemGroup>
 
 

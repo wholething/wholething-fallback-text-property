@@ -14,9 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wholething.FallbackTextProperty.Example", "Wholething.FallbackTextProperty.Example\Wholething.FallbackTextProperty.Example.csproj", "{F80D6E10-9826-4715-AD28-B4010FC2F5F8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wholething.FallbackTextProperty.Examples.Umbraco9", "Wholething.FallbackTextProperty.Examples.Umbraco9\Wholething.FallbackTextProperty.Examples.Umbraco9.csproj", "{1C96A236-2C79-412F-92C0-58D76AA30E0B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wholething.FallbackTextProperty", "Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj", "{84610FFA-E7F7-4162-B7AB-1CAE6937FFD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wholething.FallbackTextProperty", "Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj", "{84610FFA-E7F7-4162-B7AB-1CAE6937FFD7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wholething.FallbackTextProperty.Examples.Umbraco9", "Wholething.FallbackTextProperty.Examples.Umbraco9\Wholething.FallbackTextProperty.Examples.Umbraco9.csproj", "{3DA15A35-1516-4EE7-8EC1-4FFA30825BA7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,14 +28,14 @@ Global
 		{F80D6E10-9826-4715-AD28-B4010FC2F5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F80D6E10-9826-4715-AD28-B4010FC2F5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F80D6E10-9826-4715-AD28-B4010FC2F5F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1C96A236-2C79-412F-92C0-58D76AA30E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C96A236-2C79-412F-92C0-58D76AA30E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C96A236-2C79-412F-92C0-58D76AA30E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C96A236-2C79-412F-92C0-58D76AA30E0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{84610FFA-E7F7-4162-B7AB-1CAE6937FFD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{84610FFA-E7F7-4162-B7AB-1CAE6937FFD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84610FFA-E7F7-4162-B7AB-1CAE6937FFD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84610FFA-E7F7-4162-B7AB-1CAE6937FFD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3DA15A35-1516-4EE7-8EC1-4FFA30825BA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3DA15A35-1516-4EE7-8EC1-4FFA30825BA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3DA15A35-1516-4EE7-8EC1-4FFA30825BA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3DA15A35-1516-4EE7-8EC1-4FFA30825BA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
