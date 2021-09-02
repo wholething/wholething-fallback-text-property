@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text.RegularExpressions;
 using HandlebarsDotNet;
+
+#if NET5_0_OR_GREATER
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Services;
+#else
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Services;
+#endif
 
 namespace Wholething.FallbackTextProperty.ValueConverters
 {
     public class FallbackTextPropertyValueConverter : IPropertyValueConverter
     {
         private readonly IContentService _contentService;
-        private readonly IDataTypeService _dataTypeService;
 
-        public FallbackTextPropertyValueConverter(IDataTypeService dataTypeService, IContentService contentService)
+        public FallbackTextPropertyValueConverter(IContentService contentService)
         {
-            _dataTypeService = dataTypeService;
             _contentService = contentService;
         }
 

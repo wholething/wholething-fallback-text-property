@@ -1,13 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!-- Multi-targeting -->
   <PropertyGroup>
     <TargetFrameworks>net472;net50</TargetFrameworks>
-    <Version>0.2.0</Version>
+  </PropertyGroup>
+
+  <!-- NuGet package -->
+  <PropertyGroup>
+    <PackageId>Wholething.FallbackTextProperty</PackageId>
+    <Version>0.2</Version>
     <Copyright>Copyright © 2021</Copyright>
+
+    <PackageIconUrl></PackageIconUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/harry-gordon/wholething-fallback-text-property</PackageProjectUrl>
+    <PackageTags>Umbraco</PackageTags>
+    <Authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</Authors>
+
+    <RepositoryUrl>https://github.com/harry-gordon/wholething-fallback-text-property</RepositoryUrl>
+
+    <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
+    <PackageReleaseNotes>
+      0.2 - Package now supports Umbraco 8 and 9 via multi-targeting
+    </PackageReleaseNotes>
+
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+
+    <ContentTargetFolders>content</ContentTargetFolders>
+
+    <PackageOutputPath>../../output</PackageOutputPath>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="UmbracoCms.Web" Version="[8.0,9.0)" />
+    <PackageReference Include="UmbracoCms.Web" Version="[8.10.1,9.0)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net50'">
@@ -20,9 +47,9 @@
   </ItemGroup>
 
   <!-- 
-    If we don't remove Lucene we can't build https://dev.to/mattbrailsford/fixing-analyzer-problems-in-multi-targeted-umbraco-packages-3ijk
-  
-    -->
+    If we don't remove Lucene we can't build
+    https://dev.to/mattbrailsford/fixing-analyzer-problems-in-multi-targeted-umbraco-packages-3ijk
+  -->
   <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
     <ItemGroup>
       <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
@@ -41,14 +68,6 @@
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="ValueConverters\FallbackValueConverter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="ValueConverters\FallbackValueConverter.cs" />
   </ItemGroup>
 
 </Project>
