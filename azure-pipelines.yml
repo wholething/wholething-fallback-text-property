@@ -16,7 +16,7 @@ variables:
   buildConfiguration: 'Release'
   major: 0
   minor: 1
-  patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor'], 0)] # this will reset when major/minor changes
+  patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)] # this will reset when major/minor changes
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   ${{ if variables['isMain'] }}:
     NugetVersion: $(major).$(minor).$(patch)
