@@ -37,8 +37,7 @@ steps:
 - task: MSBuild@1
   inputs:
     solution: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
-    msbuildArguments: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
-    platform: '$(buildPlatform)'
+    msbuildArguments: '/p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     configuration: '$(buildConfiguration)'
 
 - task: NuGetCommand@2
