@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<PropertyGroup>
+		<FallbackTextPropertyContentFilesPath>$(MSBuildThisFileDirectory)..\content\App_Plugins\FallbackTextstring\**\*.*</FallbackTextPropertyContentFilesPath>
+	</PropertyGroup>
+
+	<Target Name="CopyFallbackTextPropertyAssets" BeforeTargets="Build">
+		<ItemGroup>
+			<FallbackTextPropertyContentFiles Include="$(FallbackTextPropertyContentFilesPath)" />
+		</ItemGroup>
+		<Message Text="Copying FallbackTextProperty files: $(FallbackTextPropertyContentFilesPath) - #@(FallbackTextPropertyContentFiles->Count()) files"  Importance="high" />
+		<Copy
+            SourceFiles="@(FallbackTextPropertyContentFiles)"
+            DestinationFiles="@(FallbackTextPropertyContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\FallbackTextstring\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true" />
+
+	</Target>
+
+	<Target Name="ClearFallbackTextPropertyAssets" BeforeTargets="Clean">
+		<ItemGroup>
+			<FallbackTextPropertyDir Include="$(MSBuildProjectDirectory)\App_Plugins\FallbackTextstring\" />
+		</ItemGroup>
+		<Message Text="Clear old FallbackTextProperty data"  Importance="high" />
+		<RemoveDir Directories="@(FallbackTextPropertyDir)"  />
+	</Target>
+
+</Project>

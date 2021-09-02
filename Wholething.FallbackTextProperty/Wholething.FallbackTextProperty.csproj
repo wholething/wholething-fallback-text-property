@@ -19,7 +19,10 @@
     <PackageReference Include="Handlebars.Net" Version="2.0.9" />
   </ItemGroup>
 
-  <!-- If we don't remove Lucene we can't build -->
+  <!-- 
+    If we don't remove Lucene we can't build https://dev.to/mattbrailsford/fixing-analyzer-problems-in-multi-targeted-umbraco-packages-3ijk
+  
+    -->
   <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
     <ItemGroup>
       <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
