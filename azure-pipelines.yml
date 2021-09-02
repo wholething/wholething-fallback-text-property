@@ -45,7 +45,7 @@ steps:
   displayName: 'NuGet pack'
   inputs:
     command: 'pack'
-    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.proj'
+    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'NugetVersion'
 
