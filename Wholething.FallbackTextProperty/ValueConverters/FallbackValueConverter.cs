@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -7,14 +7,14 @@ using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Core.Services;
 
-namespace Wholething.FallbackTextProperty.Example.ValueConverters
+namespace Wholething.FallbackTextProperty.ValueConverters
 {
-    public class FallbackValueConverter : IPropertyValueConverter
+    public class FallbackTextPropertyValueConverter : IPropertyValueConverter
     {
         private readonly IContentService _contentService;
         private readonly IDataTypeService _dataTypeService;
 
-        public FallbackValueConverter(IDataTypeService dataTypeService, IContentService contentService)
+        public FallbackTextPropertyValueConverter(IDataTypeService dataTypeService, IContentService contentService)
         {
             _dataTypeService = dataTypeService;
             _contentService = contentService;

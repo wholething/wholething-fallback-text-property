@@ -356,7 +356,6 @@
     <Compile Include="App_Data\Models\Product.generated.cs" />
     <Compile Include="App_Data\Models\Products.generated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ValueConverters\FallbackValueConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config\imageprocessor\security.config" />
@@ -370,13 +369,13 @@
     <Content Include="config\HealthChecks.config" />
     <Content Include="config\ClientDependency.config" />
     <Content Include="config\BackOfficeTours\getting-started.json" />
-    <Content Include="App_Plugins\FallbackTextstring\package.manifest" />
     <Content Include="App_Plugins\OsmMaps\package.manifest" />
     <Content Include="App_Plugins\StarterKit\backoffice\tours\create-content.json" />
     <Content Include="App_Plugins\StarterKit\backoffice\tours\data-structure.json" />
     <Content Include="App_Plugins\StarterKit\package.manifest" />
     <Content Include="App_Data\Models\all.dll.path" />
     <Content Include="App_Data\Models\models.hash" />
+    <Content Include="App_Plugins\FallbackTextstring\package.manifest" />
     <None Include="packages.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />

@@ -7,12 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <PackageReference Include="UmbracoCms.Web" Version="8.10.1" />
+    <PackageReference Include="UmbracoCms.Web" Version="[8.0,9.0)" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net50'">
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-rc002" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-rc002" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="9.0.0-rc001" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0-rc001" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Handlebars.Net" Version="2.0.9" />
   </ItemGroup>
 
   <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
@@ -20,5 +24,13 @@
       <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
     </ItemGroup>
   </Target>
+
+  <ItemGroup>
+    <Compile Remove="ValueConverters\FallbackValueConverter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="ValueConverters\FallbackValueConverter.cs" />
+  </ItemGroup>
 
 </Project>
