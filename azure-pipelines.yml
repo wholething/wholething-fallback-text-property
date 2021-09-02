@@ -12,8 +12,8 @@ pool:
 
 variables:
   solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  packageProject: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
   major: 0
   minor: 2
   patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)] # this will reset when major/minor changes
@@ -29,7 +29,7 @@ steps:
   displayName: 'dotnet nuget restore'
   inputs:
     command: 'restore'
-    projects: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
+    projects: '$(variables['packageProject'])'
     feedsToUse: 'select'
     vstsFeed: 'b4b8b301-4ace-4256-ac3f-157fab01270d/64c08c39-afb1-4c5c-88bc-d8492ccb47f3'
 
@@ -37,14 +37,14 @@ steps:
   displayName: 'dotnet build'
   inputs:
     command: 'build'
-    projects: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
+    projects: '$(variables['packageProject'])'
 
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet nuget pack'
   inputs:
     command: 'pack'
-    packagesToPack: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
+    packagesToPack: '$(variables['packageProject'])'
     includesymbols: true
     includesource: true
     versioningScheme: 'byEnvVar'
