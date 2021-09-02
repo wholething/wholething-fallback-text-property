@@ -69,5 +69,10 @@
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
   </ItemGroup>
+	<ItemGroup>
+	  <None Update="Build\Wholething.FallbackTextProperty.targets">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
 
 </Project>
