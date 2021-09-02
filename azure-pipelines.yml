@@ -29,6 +29,7 @@ steps:
   displayName: 'dotnet nuget restore'
   inputs:
     command: 'restore'
+    projects: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
     feedsToUse: 'select'
     vstsFeed: 'b4b8b301-4ace-4256-ac3f-157fab01270d/64c08c39-afb1-4c5c-88bc-d8492ccb47f3'
 
