@@ -12,10 +12,9 @@ variables:
   major: 0
   minor: 2
   patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)] # this will reset when major/minor changes
-  isMain: $[eq(variables['Build.SourceBranchName'], 'main')]
-  ${{ if variables.isMain }}:
+  ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
     NugetVersion: $(major).$(minor).$(patch)
-  ${{ if not(variables.isMain) }}: 
+  ${{ if ne(variables['Build.SourceBranchName'], 'main') }}:
     NugetVersion: $(major).$(minor).$(patch)-pre
 
 steps:
