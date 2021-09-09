@@ -20,6 +20,24 @@ variables:
 
 steps:
 
+- task: PowerShell@2
+  displayName: Display branch
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "Branch: $(variables['Build.SourceBranchName'])"' 
+
+- task: PowerShell@2
+  displayName: Display isMain (1)
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "isMain: $(variables['isMain'])"' 
+
+- task: PowerShell@2
+  displayName: Display isMain (2)
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "isMain: $(isMain)"' 
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet nuget restore'
   inputs:
