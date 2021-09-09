@@ -20,19 +20,7 @@ variables:
 steps:
 
 - task: PowerShell@2
-  displayName: Display branch
-  inputs:
-    targetType: 'inline'
-    script: 'Write-Host "Branch: $(Build.SourceBranchName)"' 
-
-- task: PowerShell@2
-  displayName: Display isMain
-  inputs:
-    targetType: 'inline'
-    script: 'Write-Host "isMain: $(isMain)"' 
-
-- task: PowerShell@2
-  displayName: Display NuGet version
+  displayName: Package version
   inputs:
     targetType: 'inline'
     script: 'Write-Host "isMain: $(NugetVersion)"' 
