@@ -10,6 +10,9 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     var noneValue = '<none>';
     $scope.noneValue = noneValue;
 
+    // List of promises that return the other nodes mentioned in the template
+    var otherNodePromises = null;
+
     assetsService
         .load([
             '~/App_Plugins/FallbackTextstring/lib/mustache.min.js'
@@ -50,6 +53,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         } else {
             $scope.model.value = $scope.value;
         }
+
+        updateFallbackDictionary();
     };
 
     $scope.model.onValueChanged = $scope.change;
@@ -76,27 +81,37 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
 
         template = $scope.model.config.fallbackTemplate;
 
-        initForm();
-
-        // Add current node to the template dictionary
-        addToDictionary(editorState.getCurrent());
-
         var otherNodeIds = getOtherNodeIds();
 
-        var promises = otherNodeIds.map((nodeId) => {
+        otherNodePromises = otherNodeIds.map((nodeId) => {
             return new Promise((resolve) => {
                 contentResource.getById(nodeId).then(function (node) {
-                    addToDictionary(node, true);
+                    console.log(`Loaded node ${nodeId} for template`);
+                    resolve(node);
                 }).catch(function (err) {
                     console.log(`Couldn't find node mentioned in template (${nodeId})`);
-                }).finally(function () {
-                    resolve();
+                    resolve(node);
                 });
             });
         });
 
-        // Update fallback all the nodes have been loaded into the dictionary
-        Promise.all(promises).then(() => {
+        initForm();
+
+        updateFallbackDictionary();
+    }
+
+    function updateFallbackDictionary() {
+        templateDictionary = {};
+
+        // Add current node to the template dictionary
+        addToDictionary(editorState.getCurrent());
+
+        console.log(editorState.getCurrent());
+
+        Promise.all(otherNodePromises).then((otherNodes) => {
+            otherNodes.map(n => {
+                addToDictionary(n, true);
+            });
             updateFallbackValue();
         });
     }
@@ -142,7 +157,7 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function buildKey(alias, prefix) {
-        return `${prefix}${alias}`
+        return `${prefix}${alias}`;
     }
 
     function getOtherNodeIds() {
