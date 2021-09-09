@@ -13,9 +13,9 @@ variables:
   minor: 2
   patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)] # this will reset when major/minor changes
   isMain: $[eq(variables['Build.SourceBranchName'], 'main')]
-  ${{ if variables['isMain'] }}:
+  ${{ if isMain] }}:
     NugetVersion: $(major).$(minor).$(patch)
-  ${{ if not(variables['isMain']) }}: 
+  ${{ if not(isMain) }}: 
     NugetVersion: $(major).$(minor).$(patch)-pre
 
 steps:
@@ -31,6 +31,12 @@ steps:
   inputs:
     targetType: 'inline'
     script: 'Write-Host "isMain: $(isMain)"' 
+
+- task: PowerShell@2
+  displayName: Display NuGet version
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "Branch: $(NugetVersion)"' 
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet nuget restore'
