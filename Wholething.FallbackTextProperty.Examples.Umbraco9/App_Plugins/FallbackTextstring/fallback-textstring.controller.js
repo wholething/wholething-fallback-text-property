@@ -53,13 +53,15 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         } else {
             $scope.model.value = $scope.value;
         }
-
-        updateFallbackDictionary();
     };
 
     $scope.model.onValueChanged = $scope.change;
 
     function init() {
+        $('.umb-property-editor input').change(function () {
+            updateFallbackDictionary();
+        });
+
         $scope.allowNone = $scope.model.config.allowNone === '1';
 
         $scope.none = $scope.model.value === noneValue;
@@ -105,8 +107,6 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
 
         // Add current node to the template dictionary
         addToDictionary(editorState.getCurrent());
-
-        console.log(editorState.getCurrent());
 
         Promise.all(otherNodePromises).then((otherNodes) => {
             otherNodes.map(n => {
