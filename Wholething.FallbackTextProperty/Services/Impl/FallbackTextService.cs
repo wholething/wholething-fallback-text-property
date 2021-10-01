@@ -1,23 +1,24 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using HandlebarsDotNet;
 #if NET5_0_OR_GREATER
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.PublishedCache;
 #else
 using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.Services;
+using Umbraco.Web.PublishedCache;
 #endif
 
 namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public class FallbackTextService : IFallbackTextService
     {
-        private readonly IContentService _contentService;
+        private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
 
-        public FallbackTextService(IContentService contentService)
+        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor)
         {
-            _contentService = contentService;
+            _publishedSnapshotAccessor = publishedSnapshotAccessor;
         }
 
         private List<int> GetReferencedNodes(string template)
@@ -47,7 +48,21 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         public Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias)
         {
-            throw new System.NotImplementedException();
+            var publishedSnapshot = GetPublishedSnapshot();
+            var node = publishedSnapshot.Content.GetById(nodeId);
+            var propertyType = node.Properties.First(p => p.Alias == propertyAlias).PropertyType;
+
+            return BuildDictionary(node, propertyType);
+        }
+
+        private IPublishedSnapshot GetPublishedSnapshot()
+        {
+#if NET5_0_OR_GREATER
+            _publishedSnapshotAccessor.TryGetPublishedSnapshot(out var publishedSnapshot);
+            return publishedSnapshot;
+#else
+            return _publishedSnapshotAccessor.PublishedSnapshot;
+#endif
         }
 
         public Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType)
@@ -69,10 +84,11 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                 }
             }
 
+            var publishedSnapshot = GetPublishedSnapshot();
             var referencedNodes = GetReferencedNodes(template);
             foreach (var referencedNodeId in referencedNodes)
             {
-                var referencedNode = _contentService.GetById(referencedNodeId);
+                var referencedNode = publishedSnapshot.Content.GetById(referencedNodeId);
 
                 dictionary.Add($"node{referencedNode.Id}:name", referencedNode.Name);
 
