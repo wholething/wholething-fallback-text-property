@@ -7,7 +7,6 @@
         <PackageReference Include="Umbraco.Cms" Version="9.0.0-rc002" />
         <PackageReference Include="Umbraco.Cms.SqlCe" Version="9.0.0-rc002" />
         <PackageReference Include="Umbraco.SqlServerCE" Version="4.0.0.1" />
-        <PackageReference Include="Wholething.FallbackTextProperty" Version="0.2.8-pre" />
     </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +43,9 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="App_Plugins\" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj" />
     </ItemGroup>
 
     <!-- Set this to true if ModelsBuilder mode is not InMemoryAuto-->
