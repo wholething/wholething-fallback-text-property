@@ -42,7 +42,13 @@
         <None Remove="umbraco\MediaCache\**" />
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="App_Plugins\" />
+      <None Remove="App_Plugins\FallbackTextstring\fallback-text-service.js" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="App_Plugins\FallbackTextstring\fallback-text-service.js">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj" />

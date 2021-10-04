@@ -1,8 +1,8 @@
 ﻿var umbraco = angular.module('umbraco');
 
-umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', 'contentResource', 'editorState', function ($scope, assetsService, contentResource, editorState) {
+umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', 'contentResource', 'editorState', 'fallbackTextService', function ($scope, assetsService, contentResource, editorState, fallbackTextService) {
 
-    var templateDictionary = {};
+    var templateDictionary = null;
     var template;
 
     var form = null;
@@ -10,8 +10,7 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     var noneValue = '<none>';
     $scope.noneValue = noneValue;
 
-    // List of promises that return the other nodes mentioned in the template
-    var otherNodePromises = null;
+    var templateDictionaryPromise = null;
 
     assetsService
         .load([
@@ -30,9 +29,9 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
             $scope.nearMaxLimit = $scope.validLength && $scope.charsCount > Math.max($scope.maxChars * .8, $scope.maxChars - 25);
 
             if ($scope.validLength === true) {
-                form.text.$setValidity("maxChars", true);
+                form.text.$setValidity('maxChars', true);
             } else {
-                form.text.$setValidity("maxChars", false);
+                form.text.$setValidity('maxChars', false);
             }
         }
     };
@@ -83,37 +82,11 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
 
         template = $scope.model.config.fallbackTemplate;
 
-        var otherNodeIds = getOtherNodeIds();
-
-        otherNodePromises = otherNodeIds.map((nodeId) => {
-            return new Promise((resolve) => {
-                contentResource.getById(nodeId).then(function (node) {
-                    console.log(`Loaded node ${nodeId} for template`);
-                    resolve(node);
-                }).catch(function (err) {
-                    console.log(`Couldn't find node mentioned in template (${nodeId})`);
-                    resolve(node);
-                });
-            });
-        });
-
         initForm();
 
+        templateDictionaryPromise = getFallbackDictionary();
+
         updateFallbackDictionary();
-    }
-
-    function updateFallbackDictionary() {
-        templateDictionary = {};
-
-        // Add current node to the template dictionary
-        addToDictionary(editorState.getCurrent());
-
-        Promise.all(otherNodePromises).then((otherNodes) => {
-            otherNodes.map(n => {
-                addToDictionary(n, true);
-            });
-            updateFallbackValue();
-        });
     }
 
     function initForm() {
@@ -141,6 +114,29 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         $scope.validLength = true;
     }
 
+    function checkLengthValidity() {
+        $scope.validLength = $scope.maxChars ? $scope.charsCount <= $scope.maxChars : true;
+    }
+
+    function getFallbackDictionary() {
+        console.log(editorState.getCurrent(), $scope.model);
+        return fallbackTextService.getTemplateData(editorState.getCurrent().id, $scope.model.alias).then(function(data) {
+            templateDictionary = data;
+        }, function (error) {
+            templateDictionary = {};
+            console.log(error);
+        });
+    }
+
+    function updateFallbackDictionary() {
+        templateDictionaryPromise.then(function() {
+            // Add current node to the template dictionary
+            addToDictionary(editorState.getCurrent());
+
+            updateFallbackValue();
+        });
+    }
+
     function updateFallbackValue() {
         $scope.fallback = Mustache.render(template, templateDictionary);
     }
@@ -158,21 +154,5 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
 
     function buildKey(alias, prefix) {
         return `${prefix}${alias}`;
-    }
-
-    function getOtherNodeIds() {
-        var regex = new RegExp(/([0-9]+):/g);
-        var matches = template.matchAll(regex);
-
-        var nodeIds = [];
-        for (var match of matches) {
-            nodeIds.push(parseInt(match[1]));
-        }
-
-        return nodeIds;
-    }
-
-    function checkLengthValidity() {
-        $scope.validLength = $scope.maxChars ? $scope.charsCount <= $scope.maxChars : true;
     }
 }]);

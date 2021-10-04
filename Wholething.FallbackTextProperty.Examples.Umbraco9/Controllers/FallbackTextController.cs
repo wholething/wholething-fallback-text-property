@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Web.Common.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
@@ -17,9 +17,14 @@ namespace Wholething.FallbackTextProperty.Examples.Umbraco9.Controllers
         }
 
         [HttpGet]
-        public Dictionary<string, object> Get(int nodeId, string propertyAlias)
+        public IActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias)
         {
-            return _fallbackTextService.BuildDictionary(nodeId, propertyAlias);
+            if (!ModelState.IsValid)
+            {
+                return new BadRequestResult();
+            }
+
+            return new OkObjectResult(_fallbackTextService.BuildDictionary(nodeId, propertyAlias));
         }
     }
 }
