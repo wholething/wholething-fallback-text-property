@@ -266,9 +266,6 @@
     <Reference Include="Umbraco.Web.UI, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Web.8.10.1\lib\net472\Umbraco.Web.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Wholething.FallbackTextProperty, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Wholething.FallbackTextProperty.0.2.9-pre\lib\net472\Wholething.FallbackTextProperty.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -276,11 +273,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Plugins\FallbackTextstring\fallback-textarea.html" />
     <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.controller.js" />
-    <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.css" />
-    <Content Include="App_Plugins\FallbackTextstring\fallback-textstring.html" />
-    <Content Include="App_Plugins\FallbackTextstring\lib\mustache.min.js" />
     <Content Include="App_Plugins\OsmMaps\assets\css\osmmaps.css" />
     <Content Include="App_Plugins\OsmMaps\assets\leaflet\images\layers-2x.png" />
     <Content Include="App_Plugins\OsmMaps\assets\leaflet\images\layers.png" />
@@ -378,7 +371,6 @@
     <Content Include="App_Plugins\StarterKit\package.manifest" />
     <Content Include="App_Data\Models\all.dll.path" />
     <Content Include="App_Data\Models\models.hash" />
-    <Content Include="App_Plugins\FallbackTextstring\package.manifest" />
     <None Include="packages.config" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Partials\Grid\Editors\Textstring.cshtml" />
@@ -398,7 +390,12 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj">
+      <Project>{84610ffa-e7f7-4162-b7ab-1cae6937ffd7}</Project>
+      <Name>Wholething.FallbackTextProperty</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

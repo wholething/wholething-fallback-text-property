@@ -19,7 +19,7 @@ namespace Wholething.FallbackTextProperty.Composers
         }
     }
 #else
-    public class FallbackTextComposer : IUserComposer
+    public class FallbackTextComposer : ICoreComposer
     {
         public void Compose(Composition composition)
         {
