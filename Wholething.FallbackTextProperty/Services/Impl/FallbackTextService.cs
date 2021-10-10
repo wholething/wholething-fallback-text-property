@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web.Caching;
 using HandlebarsDotNet;
 using Wholething.FallbackTextProperty.Extensions;
 using Wholething.FallbackTextProperty.Services.Models;
@@ -29,32 +27,6 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
             _resolvers = resolvers;
-        }
-
-        private bool TryParseReference(string reference, out FallbackTextReference parsedReference)
-        {
-            try
-            {
-                var parts = reference.Split('(');
-                var function = parts[0];
-                var args = parts[1]
-                    .Substring(0, parts[1].Length - 1)
-                    .Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
-                    .Select(x => x.Trim(new[] { ' ', ')' }))
-                    .ToArray();
-
-                parsedReference = new FallbackTextReference
-                {
-                    Function = function,
-                    Args = args
-                };
-                return true;
-            }
-            catch (Exception)
-            {
-                parsedReference = null;
-                return false;
-            }
         }
 
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType)
@@ -95,13 +67,11 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                     dictionary[publishedProperty.Alias] = strValue;
                 }
             }
+            
+            var referencedNodes = GetAllReferencedNodes(template, owner as IPublishedContent);
 
-            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
-            var referencedNodes = GetNodeReferences(template);
-            foreach (var referencedNodeId in referencedNodes)
+            foreach (var referencedNode in referencedNodes)
             {
-                var referencedNode = publishedSnapshot.Content.GetById(referencedNodeId);
-
                 dictionary.Add($"node{referencedNode.Id}:name", referencedNode.Name);
 
                 foreach (var property in referencedNode.Properties)
@@ -132,7 +102,26 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return template;
         }
 
-        private List<int> GetNodeReferences(string template)
+        private List<IPublishedContent> GetAllReferencedNodes(string template, IPublishedContent owner)
+        {
+            var nodes = new List<IPublishedContent>();
+
+            // TODO: Not sure if this is necessary - shouldn't the owner always be an IPublishedContent?
+            if (owner != null)
+            {
+                nodes.AddRange(GetFunctionReferences(template, owner));
+            }
+
+            var idReferences = GetIdReferences(template);
+            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
+            nodes.AddRange(
+                idReferences.Select(id => publishedSnapshot.Content.GetById(id))
+            );
+
+            return nodes;
+        }
+
+        private List<int> GetIdReferences(string template)
         {
             var regex = new Regex(IdReferencePattern);
             var matches = regex.Matches(template);
@@ -146,15 +135,26 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return nodeIds;
         }
 
-        private List<IPublishedContent> GetOtherReferences(string template, IPublishedContent owner)
+        private List<IPublishedContent> GetFunctionReferences(string template, IPublishedContent owner)
         {
             var regex = new Regex(FunctionReferencePattern);
             var matches = regex.Matches(template);
 
-            var references = new List<string>();
+            var references = new List<FallbackTextFunctionReference>();
             foreach (Match match in matches)
             {
-                references.Add(match.Groups[1].Value);
+                var args = match.Groups.Count != 3 ? 
+                    new string[0] :
+                    match.Groups[3].Value
+                        .Split(',')
+                        .Select(s => s.Trim())
+                        .ToArray();
+
+                references.Add(new FallbackTextFunctionReference
+                {
+                    Function = match.Groups[1].Value,
+                    Args = args
+                });
             }
             references = references.Distinct().ToList();
 
@@ -168,17 +168,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return nodes;
         }
 
-        private IPublishedContent TryResolve(string reference, FallbackTextResolverContext context)
+        private IPublishedContent TryResolve(FallbackTextFunctionReference reference, FallbackTextResolverContext context)
         {
-            var parsed = TryParseReference(reference, out var parsedReference);
-            if (!parsed)
-            {
-                return null;
-            }
-
-            var resolver = _resolvers.FirstOrDefault(r => r.CanResolve(parsedReference));
-
-            return resolver?.Resolve(parsedReference, context);
+            var resolver = _resolvers.FirstOrDefault(r => r.CanResolve(reference));
+            return resolver?.Resolve(reference, context);
         }
     }
 }
