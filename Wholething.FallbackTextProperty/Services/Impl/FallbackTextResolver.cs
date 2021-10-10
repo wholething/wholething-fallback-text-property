@@ -7,17 +7,17 @@ namespace Wholething.FallbackTextProperty.Services.Impl
     {
         protected abstract string FunctionName { get; }
 
-        public bool CanResolve(string function, string[] args)
+        public bool CanResolve(FallbackTextReference reference)
         {
-            CheckArguments(args);
-            return function == FunctionName;
+            CheckArguments(reference.Args);
+            return reference.Function == FunctionName;
         }
 
         public abstract void CheckArguments(string[] args);
 
-        public IPublishedContent Resolve(string function, string[] args, FallbackTextResolverContext context)
+        public IPublishedContent Resolve(FallbackTextReference reference, FallbackTextResolverContext context)
         {
-            return Resolve(args, context);
+            return Resolve(reference.Args, context);
         }
 
         protected abstract IPublishedContent Resolve(string[] args, FallbackTextResolverContext context);

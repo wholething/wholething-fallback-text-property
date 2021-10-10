@@ -7,6 +7,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
     public class ParentFallbackTextResolver : FallbackTextResolver
     {
         protected override string FunctionName => "parent";
+
         public override void CheckArguments(string[] args)
         {
             if (args.Length > 0)

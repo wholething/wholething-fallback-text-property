@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Web.Caching;
 using HandlebarsDotNet;
 using Wholething.FallbackTextProperty.Extensions;
+using Wholething.FallbackTextProperty.Services.Models;
 #if NET5_0_OR_GREATER
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PublishedCache;
@@ -21,53 +22,39 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
 
+        private const string IdReferencePattern = @"{{([0-9]+):.+}}";
+        private const string FunctionReferencePattern = @"{{(\w+)(\((.+)\))?:.+}}";
+
         public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
             _resolvers = resolvers;
         }
 
-        private List<int> GetNodeReferences(string template)
+        private bool TryParseReference(string reference, out FallbackTextReference parsedReference)
         {
-            var regex = new Regex(@"([0-9]+):");
-            var matches = regex.Matches(template);
-
-            var nodeIds = new List<int>();
-            foreach (Match match in matches)
+            try
             {
-                nodeIds.Add(int.Parse(match.Groups[1].Value));
+                var parts = reference.Split('(');
+                var function = parts[0];
+                var args = parts[1]
+                    .Substring(0, parts[1].Length - 1)
+                    .Split(",".ToCharArray(), StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim(new[] { ' ', ')' }))
+                    .ToArray();
+
+                parsedReference = new FallbackTextReference
+                {
+                    Function = function,
+                    Args = args
+                };
+                return true;
             }
-
-            return nodeIds;
-        }
-
-        private List<IPublishedContent> GetOtherReferences(string template)
-        {
-            var regex = new Regex(@"([A-z()]+):");
-            var matches = regex.Matches(template);
-
-            var references = new List<string>();
-            foreach (Match match in matches)
+            catch (Exception)
             {
-                references.Add(match.Groups[1].Value);
+                parsedReference = null;
+                return false;
             }
-            references = references.Distinct().ToList();
-
-            var nodes = references.Select(TryResolve).Where(n => n != null).ToList();
-            return nodes;
-        }
-
-        private IPublishedContent TryResolve(string reference)
-        {
-            var parts = reference.Split('(');
-            var function = parts[0];
-            var args = parts[1]
-                .Substring(0, parts[1].Length - 1)
-                .Split(",", StringSplitOptions.RemoveEmptyEntries);
-
-            IFallbackTextResolver resolver = _resolvers.FirstOrDefault(r => r.CanResolve());
-            
-            throw new System.NotImplementedException();
         }
 
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType)
@@ -133,14 +120,65 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private string GetTemplate(IPublishedPropertyType propertyType)
         {
             var template = (string)((Dictionary<string, object>)propertyType.DataType.Configuration)["fallbackTemplate"];
-            var referencedNodes = GetNodeReferences(template);
+
             // There is some quirk of the Mustache implementation that means a variable name cannot
             // start with a number!
-            referencedNodes.ForEach(referencedNodeId =>
-            {
-                template = template.Replace($"{referencedNodeId}", $"node{referencedNodeId}");
-            });
+            template = Regex.Replace(
+                template,
+                IdReferencePattern,
+                m => $"node{m.Groups[1].Value}"
+            );
+
             return template;
+        }
+
+        private List<int> GetNodeReferences(string template)
+        {
+            var regex = new Regex(IdReferencePattern);
+            var matches = regex.Matches(template);
+
+            var nodeIds = new List<int>();
+            foreach (Match match in matches)
+            {
+                nodeIds.Add(int.Parse(match.Groups[1].Value));
+            }
+
+            return nodeIds;
+        }
+
+        private List<IPublishedContent> GetOtherReferences(string template, IPublishedContent owner)
+        {
+            var regex = new Regex(FunctionReferencePattern);
+            var matches = regex.Matches(template);
+
+            var references = new List<string>();
+            foreach (Match match in matches)
+            {
+                references.Add(match.Groups[1].Value);
+            }
+            references = references.Distinct().ToList();
+
+            var resolverContext = new FallbackTextResolverContext(owner);
+
+            var nodes = references
+                .Select(r => TryResolve(r, resolverContext))
+                .Where(n => n != null)
+                .ToList();
+
+            return nodes;
+        }
+
+        private IPublishedContent TryResolve(string reference, FallbackTextResolverContext context)
+        {
+            var parsed = TryParseReference(reference, out var parsedReference);
+            if (!parsed)
+            {
+                return null;
+            }
+
+            var resolver = _resolvers.FirstOrDefault(r => r.CanResolve(parsedReference));
+
+            return resolver?.Resolve(parsedReference, context);
         }
     }
 }
