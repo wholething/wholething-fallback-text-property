@@ -266,6 +266,9 @@
     <Reference Include="Umbraco.Web.UI, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\UmbracoCms.Web.8.10.1\lib\net472\Umbraco.Web.UI.dll</HintPath>
     </Reference>
+    <Reference Include="Wholething.FallbackTextProperty, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Wholething.FallbackTextProperty.0.2.32-pre\lib\net472\Wholething.FallbackTextProperty.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -389,12 +392,6 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj">
-      <Project>{84610ffa-e7f7-4162-b7ab-1cae6937ffd7}</Project>
-      <Name>Wholething.FallbackTextProperty</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
