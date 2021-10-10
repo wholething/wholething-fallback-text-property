@@ -54,8 +54,8 @@ namespace Umbraco.Cms.Web.Common.PublishedModels
 		///</summary>
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Umbraco.ModelsBuilder.Embedded", "9.0.0-rc002+dba385e5e52ee5a0dafd48f687e8d8254b3a633a")]
 		[global::System.Diagnostics.CodeAnalysis.MaybeNull]
-		[ImplementPropertyType("sEOTitle")]
-		public virtual string SEotitle => this.Value<string>(_publishedValueFallback, "sEOTitle");
+		[ImplementPropertyType("seoTitle")]
+		public virtual string SeoTitle => this.Value<string>(_publishedValueFallback, "seoTitle");
 
 		///<summary>
 		/// Title
