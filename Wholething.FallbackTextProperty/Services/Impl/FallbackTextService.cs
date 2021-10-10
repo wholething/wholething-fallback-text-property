@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web.Caching;
 using HandlebarsDotNet;
+using Wholething.FallbackTextProperty.Extensions;
 #if NET5_0_OR_GREATER
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PublishedCache;
@@ -16,12 +19,15 @@ namespace Wholething.FallbackTextProperty.Services.Impl
     {
         private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
 
-        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor)
+        private readonly IEnumerable<IFallbackTextResolver> _resolvers;
+
+        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
+            _resolvers = resolvers;
         }
 
-        private List<int> GetReferencedNodes(string template)
+        private List<int> GetNodeReferences(string template)
         {
             var regex = new Regex(@"([0-9]+):");
             var matches = regex.Matches(template);
@@ -33,6 +39,35 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             }
 
             return nodeIds;
+        }
+
+        private List<IPublishedContent> GetOtherReferences(string template)
+        {
+            var regex = new Regex(@"([A-z()]+):");
+            var matches = regex.Matches(template);
+
+            var references = new List<string>();
+            foreach (Match match in matches)
+            {
+                references.Add(match.Groups[1].Value);
+            }
+            references = references.Distinct().ToList();
+
+            var nodes = references.Select(TryResolve).Where(n => n != null).ToList();
+            return nodes;
+        }
+
+        private IPublishedContent TryResolve(string reference)
+        {
+            var parts = reference.Split('(');
+            var function = parts[0];
+            var args = parts[1]
+                .Substring(0, parts[1].Length - 1)
+                .Split(",", StringSplitOptions.RemoveEmptyEntries);
+
+            IFallbackTextResolver resolver = _resolvers.FirstOrDefault(r => r.CanResolve());
+            
+            throw new System.NotImplementedException();
         }
 
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType)
@@ -48,21 +83,11 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         public Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias)
         {
-            var publishedSnapshot = GetPublishedSnapshot();
+            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             var node = publishedSnapshot.Content.GetById(nodeId);
             var propertyType = node.Properties.First(p => p.Alias == propertyAlias).PropertyType;
 
             return BuildDictionary(node, propertyType);
-        }
-
-        private IPublishedSnapshot GetPublishedSnapshot()
-        {
-#if NET5_0_OR_GREATER
-            _publishedSnapshotAccessor.TryGetPublishedSnapshot(out var publishedSnapshot);
-            return publishedSnapshot;
-#else
-            return _publishedSnapshotAccessor.PublishedSnapshot;
-#endif
         }
 
         public Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType)
@@ -84,8 +109,8 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                 }
             }
 
-            var publishedSnapshot = GetPublishedSnapshot();
-            var referencedNodes = GetReferencedNodes(template);
+            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
+            var referencedNodes = GetNodeReferences(template);
             foreach (var referencedNodeId in referencedNodes)
             {
                 var referencedNode = publishedSnapshot.Content.GetById(referencedNodeId);
@@ -108,7 +133,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private string GetTemplate(IPublishedPropertyType propertyType)
         {
             var template = (string)((Dictionary<string, object>)propertyType.DataType.Configuration)["fallbackTemplate"];
-            var referencedNodes = GetReferencedNodes(template);
+            var referencedNodes = GetNodeReferences(template);
             // There is some quirk of the Mustache implementation that means a variable name cannot
             // start with a number!
             referencedNodes.ForEach(referencedNodeId =>
