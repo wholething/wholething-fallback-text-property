@@ -22,7 +22,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
 
         private const string IdReferencePattern = @"{{([0-9]+):.+}}";
-        private const string FunctionReferencePattern = @"{{(([a-zA-Z]+)(\((.+)\))?):.+}}";
+        private const string FunctionReferencePattern = @"{{(([a-zA-Z]+)(\(([\w, ]+)\))?):\w+}}";
 
         public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers)
         {
@@ -169,7 +169,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                     match.Groups[1].Value
                 ));
             }
-            references = references.Distinct().ToList();
+            references = references.ToList();
 
             var resolverContext = new FallbackTextResolverContext(owner);
 
