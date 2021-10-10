@@ -8,6 +8,7 @@ using Wholething.FallbackTextProperty.Services.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PublishedCache;
 #else
+using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web.PublishedCache;
 #endif
@@ -21,7 +22,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
 
         private const string IdReferencePattern = @"{{([0-9]+):.+}}";
-        private const string FunctionReferencePattern = @"{{(\w+)(\((.+)\))?:.+}}";
+        private const string FunctionReferencePattern = @"{{(([a-zA-Z]+)(\((.+)\))?):.+}}";
 
         public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers)
         {
@@ -44,6 +45,9 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         {
             var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             var node = publishedSnapshot.Content.GetById(nodeId);
+
+            if (node == null) return new Dictionary<string, object>();
+
             var propertyType = node.Properties.First(p => p.Alias == propertyAlias).PropertyType;
 
             return BuildDictionary(node, propertyType);
@@ -70,16 +74,16 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             
             var referencedNodes = GetAllReferencedNodes(template, owner as IPublishedContent);
 
-            foreach (var referencedNode in referencedNodes)
+            foreach (var (key, referencedNode) in referencedNodes)
             {
-                dictionary.Add($"node{referencedNode.Id}:name", referencedNode.Name);
+                dictionary.Add($"{key}:name", referencedNode.Name);
 
                 foreach (var property in referencedNode.Properties)
                 {
                     var propertyValue = property.GetValue();
-                    if (propertyValue != null && propertyValue is string strValue)
+                    if (propertyValue is string strValue)
                     {
-                        dictionary[$"node{referencedNode.Id}:{property.Alias}"] = strValue;
+                        dictionary[$"{key}:{property.Alias}"] = strValue;
                     }
                 }
             }
@@ -102,11 +106,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return template;
         }
 
-        private List<IPublishedContent> GetAllReferencedNodes(string template, IPublishedContent owner)
+        private Dictionary<string, IPublishedContent> GetAllReferencedNodes(string template, IPublishedContent owner)
         {
-            var nodes = new List<IPublishedContent>();
+            var nodes = new Dictionary<string, IPublishedContent>();
 
-            // TODO: Not sure if this is necessary - shouldn't the owner always be an IPublishedContent?
             if (owner != null)
             {
                 nodes.AddRange(GetFunctionReferences(template, owner));
@@ -115,7 +118,11 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             var idReferences = GetIdReferences(template);
             var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             nodes.AddRange(
-                idReferences.Select(id => publishedSnapshot.Content.GetById(id))
+                idReferences
+                    .ToDictionary(
+                        id => $"node{id}", 
+                        id => publishedSnapshot.Content.GetById(id)
+                    )
             );
 
             return nodes;
@@ -135,35 +142,42 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return nodeIds;
         }
 
-        private List<IPublishedContent> GetFunctionReferences(string template, IPublishedContent owner)
+        private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedContent owner)
         {
+            // TODO: Not sure if this is necessary - shouldn't the owner always be an IPublishedContent?
+            if (owner == null)
+            {
+                return new Dictionary<string, IPublishedContent>();
+            }
+
             var regex = new Regex(FunctionReferencePattern);
             var matches = regex.Matches(template);
 
             var references = new List<FallbackTextFunctionReference>();
             foreach (Match match in matches)
             {
-                var args = match.Groups.Count != 3 ? 
+                var args = match.Groups.Count != 4 ? 
                     new string[0] :
-                    match.Groups[3].Value
+                    match.Groups[4].Value
                         .Split(',')
                         .Select(s => s.Trim())
                         .ToArray();
 
-                references.Add(new FallbackTextFunctionReference
-                {
-                    Function = match.Groups[1].Value,
-                    Args = args
-                });
+                references.Add(new FallbackTextFunctionReference(
+                    match.Groups[2].Value,
+                    args,
+                    match.Groups[1].Value
+                ));
             }
             references = references.Distinct().ToList();
 
             var resolverContext = new FallbackTextResolverContext(owner);
 
+            // Need to keep the key with the resolved node
             var nodes = references
-                .Select(r => TryResolve(r, resolverContext))
-                .Where(n => n != null)
-                .ToList();
+                .ToDictionary(x => x.Key, x => TryResolve(x, resolverContext))
+                .Where(x => x.Value != null)
+                .ToDictionary(x => x.Key, x => x.Value);
 
             return nodes;
         }

@@ -72,6 +72,7 @@
     }
   ],
   "javascript": [
+    "~/App_Plugins/FallbackTextstring/fallback-text-service.js",
     "~/App_Plugins/FallbackTextstring/fallback-textstring.controller.js"
   ],
   "css": [

@@ -16,6 +16,8 @@ namespace Wholething.FallbackTextProperty.Composers
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddSingleton<IFallbackTextService, FallbackTextService>();
+
+            builder.Services.AddSingleton<IFallbackTextResolver, ParentFallbackTextResolver>();
         }
     }
 #else
@@ -24,6 +26,8 @@ namespace Wholething.FallbackTextProperty.Composers
         public void Compose(Composition composition)
         {
             composition.Register(typeof(IFallbackTextService), typeof(FallbackTextService), Lifetime.Singleton);
+
+            composition.Register(typeof(IFallbackTextResolver), typeof(ParentFallbackTextResolver), Lifetime.Singleton);
         }
     }
 #endif
