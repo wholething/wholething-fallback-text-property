@@ -19,6 +19,7 @@ namespace Wholething.FallbackTextProperty.Composers
 
             builder.Services.AddSingleton<IFallbackTextResolver, ParentFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, RootFallbackTextResolver>();
+            builder.Services.AddSingleton<IFallbackTextResolver, AncestorFallbackTextResolver>();
         }
     }
 #else
@@ -30,6 +31,7 @@ namespace Wholething.FallbackTextProperty.Composers
 
             composition.Register(typeof(IFallbackTextResolver), typeof(ParentFallbackTextResolver), Lifetime.Singleton);
             composition.Register(typeof(IFallbackTextResolver), typeof(RootFallbackTextResolver), Lifetime.Singleton);
+            composition.Register(typeof(IFallbackTextResolver), typeof(AncestorFallbackTextResolver), Lifetime.Singleton);
         }
     }
 #endif
