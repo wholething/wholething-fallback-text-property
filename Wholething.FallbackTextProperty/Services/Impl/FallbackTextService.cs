@@ -20,14 +20,15 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
 
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
+        private readonly IFallbackTextReferenceParser _referenceParser;
 
         private const string IdReferencePattern = @"{{([0-9]+):.+}}";
-        private const string FunctionReferencePattern = @"{{(([a-zA-Z]+)(\(([\w, ]+)\))?):\w+}}";
 
-        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers)
+        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, IFallbackTextReferenceParser referenceParser)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
             _resolvers = resolvers;
+            _referenceParser = referenceParser;
         }
 
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType)
@@ -150,26 +151,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                 return new Dictionary<string, IPublishedContent>();
             }
 
-            var regex = new Regex(FunctionReferencePattern);
-            var matches = regex.Matches(template);
-
-            var references = new List<FallbackTextFunctionReference>();
-            foreach (Match match in matches)
-            {
-                var args = match.Groups.Count != 4 ? 
-                    new string[0] :
-                    match.Groups[4].Value
-                        .Split(',')
-                        .Select(s => s.Trim())
-                        .ToArray();
-
-                references.Add(new FallbackTextFunctionReference(
-                    match.Groups[2].Value,
-                    args,
-                    match.Groups[1].Value
-                ));
-            }
-            references = references.ToList();
+            var references = _referenceParser.Parse(template);
 
             var resolverContext = new FallbackTextResolverContext(owner);
 
