@@ -26,6 +26,14 @@ In the example we use the following template: `{{1104:heroHeader}} - {{pageTitle
 
 ![fallback-text-2](https://user-images.githubusercontent.com/28703576/106004107-c6be5000-60aa-11eb-918f-8944f73fedf5.PNG)
 
+### Referring to other nodes
+
+The fallback template supports the following node references:
+- Node ID: `{{1069:propertyAlias}}`
+- Parent node: `{{parent:propertyAlias}}`
+- Root node: `{{root:propertyAlias}}`
+- Ancestor by content type alias: `{{ancestor(blogPost):propertyAlias}}`
+
 ## Implementation
 
 The implementation is fairly straight-forward and involves the following:
@@ -38,4 +46,3 @@ The implementation is fairly straight-forward and involves the following:
 There are a few notable limitations:
 - The fallback template can only handle simple properties. For example referring to other fallback properties in a fallback template wouldn't work.
 - The fallback template rendering does not currently use live values, just whatever is in the model when the editor is loaded.
-- Referring to other nodes in the template by node ID is not ideal, it's a suitable proof of concept but we'd like to look at other ways (for example, by name, doc type or URL).
