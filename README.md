@@ -1,6 +1,6 @@
 # Wholething Fallback Text Property
 
-This Umbraco package provides two custom text property editors that allow developers to enter "fallback value", rendered from a Mustache template.
+This Umbraco package provides two custom text property editors, "Textstring with Fallback" and "Textarea with Fallback", that allow developers to enter "fallback value", rendered from a Mustache template.
 
 The fallback can be built from other node properties and properties of other specific nodes in the content tree.
 
