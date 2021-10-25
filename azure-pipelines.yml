@@ -9,8 +9,8 @@ variables:
   solution: '**/*.sln'
   buildConfiguration: 'Release'
   packageProject: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
-  major: 0
-  minor: 2
+  major: 1
+  minor: 0
   patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)] # this will reset when major/minor changes
   ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
     NugetVersion: $(major).$(minor).$(patch)
@@ -31,7 +31,7 @@ steps:
     command: 'restore'
     projects: '$(packageProject)'
     feedsToUse: 'select'
-    vstsFeed: 'b4b8b301-4ace-4256-ac3f-157fab01270d/64c08c39-afb1-4c5c-88bc-d8492ccb47f3'
+    vstsFeed: 'eb3f777d-48d0-4898-932f-35673efacabd/d102e843-1008-4562-bc96-dd1f1a8632c4'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build'
@@ -53,4 +53,4 @@ steps:
     command: 'push'
     packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg'
     nuGetFeedType: 'internal'
-    publishVstsFeed: 'b4b8b301-4ace-4256-ac3f-157fab01270d/64c08c39-afb1-4c5c-88bc-d8492ccb47f3'
+    publishVstsFeed: 'eb3f777d-48d0-4898-932f-35673efacabd/d102e843-1008-4562-bc96-dd1f1a8632c4'
