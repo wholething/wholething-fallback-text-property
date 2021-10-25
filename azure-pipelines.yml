@@ -10,7 +10,7 @@ variables:
   buildConfiguration: 'Release'
   packageProject: 'Wholething.FallbackTextProperty/Wholething.FallbackTextProperty.csproj'
   major: 1
-  minor: 0
+  minor: 1
   patch: $[counter(format('{0}.{1}', variables['Major'], variables['Minor']), 0)] # this will reset when major/minor changes
   ${{ if eq(variables['Build.SourceBranchName'], 'main') }}:
     NugetVersion: $(major).$(minor).$(patch)

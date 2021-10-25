@@ -20,9 +20,8 @@
     <RepositoryUrl>https://github.com/harry-gordon/wholething-fallback-text-property</RepositoryUrl>
 
     <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
-    <PackageReleaseNotes>
-      0.2 - Package now supports Umbraco 8 and 9 via multi-targeting
-    </PackageReleaseNotes>
+    <PackageReleaseNotes>- Added support for node referencing functions (ancestor, root, parent, etc).
+- Package now supports Umbraco 8 and 9 via multi-targeting.</PackageReleaseNotes>
 
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -31,6 +30,10 @@
     <ContentTargetFolders>content</ContentTargetFolders>
 
     <PackageOutputPath>../../output</PackageOutputPath>
+
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
