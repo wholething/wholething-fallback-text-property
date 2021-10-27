@@ -1,4 +1,5 @@
-﻿using Wholething.FallbackTextProperty.Services;
+﻿using System.Linq;
+using Wholething.FallbackTextProperty.Services;
 using Wholething.FallbackTextProperty.Services.Impl;
 #if NET5_0_OR_GREATER
 using Umbraco.Cms.Core.Composing;
@@ -20,6 +21,8 @@ namespace Wholething.FallbackTextProperty.Composers
             builder.Services.AddSingleton<IFallbackTextResolver, ParentFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, RootFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, AncestorFallbackTextResolver>();
+
+            builder.Services.AddSingleton<IFallbackTextReferenceParser, FallbackTextReferenceParser>();
         }
     }
 #else
@@ -32,6 +35,8 @@ namespace Wholething.FallbackTextProperty.Composers
             composition.Register(typeof(IFallbackTextResolver), typeof(ParentFallbackTextResolver), Lifetime.Singleton);
             composition.Register(typeof(IFallbackTextResolver), typeof(RootFallbackTextResolver), Lifetime.Singleton);
             composition.Register(typeof(IFallbackTextResolver), typeof(AncestorFallbackTextResolver), Lifetime.Singleton);
+
+            composition.Register(typeof(IFallbackTextReferenceParser), typeof(FallbackTextReferenceParser), Lifetime.Singleton);
         }
     }
 #endif
