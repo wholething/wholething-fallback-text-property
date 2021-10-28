@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Multi-targeting -->
   <PropertyGroup>
@@ -13,11 +13,11 @@
 
     <PackageIconUrl></PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/harry-gordon/wholething-fallback-text-property</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/wholething/wholething-fallback-text-property</PackageProjectUrl>
     <PackageTags>Umbraco</PackageTags>
     <Authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</Authors>
 
-    <RepositoryUrl>https://github.com/harry-gordon/wholething-fallback-text-property</RepositoryUrl>
+    <RepositoryUrl>https://github.com/wholething/wholething-fallback-text-property</RepositoryUrl>
 
     <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
     <PackageReleaseNotes>- Added support for node referencing functions (ancestor, root, parent, etc).
