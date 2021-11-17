@@ -22,7 +22,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
         private readonly IFallbackTextReferenceParser _referenceParser;
 
-        private const string IdReferencePattern = @"{{([0-9]+):.+}}";
+        private const string IdReferencePattern = @"{{(?>node)?([0-9]+):\w+}}";
 
         public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, IFallbackTextReferenceParser referenceParser)
         {
