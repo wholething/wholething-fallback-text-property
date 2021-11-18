@@ -23,6 +23,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                     match.Groups[4].Value
                         .Split(',')
                         .Select(s => s.Trim())
+                        .Where(s => !string.IsNullOrWhiteSpace(s))
                         .ToArray();
 
                 references.Add(new FallbackTextFunctionReference(
