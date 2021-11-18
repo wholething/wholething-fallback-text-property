@@ -48,3 +48,13 @@ The implementation is fairly straight-forward and involves the following:
 There are a few notable limitations:
 - The fallback template can only handle simple properties. For example referring to other fallback properties in a fallback template wouldn't work.
 - The fallback template rendering does not currently use live values, just whatever is in the model when the editor is loaded.
+
+## Development notes
+
+### Packaging
+
+The package is built in Azure DevOps but in the event that you need build it locally you can use the following command (replacing `local-package-path` and `version`):
+
+```
+dotnet pack Wholething.FallbackTextProperty\Wholething.FallbackTextProperty.csproj --output {local-package-path} /p:Configuration=Debug /p:PackageVersion={version}-local --include-symbols
+```
