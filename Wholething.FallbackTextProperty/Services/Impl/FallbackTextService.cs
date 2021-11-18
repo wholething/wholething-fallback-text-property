@@ -34,12 +34,41 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType)
         {
             var template = GetTemplate(propertyType);
+            template = PreprocessTemplate(template);
 
             var dictionary = BuildDictionary(owner, propertyType);
 
             var compiled = Handlebars.Compile(template);
 
+            dictionary = PreprocessDictionary(dictionary);
+
             return compiled(dictionary);
+        }
+
+        private Dictionary<string, object> PreprocessDictionary(Dictionary<string, object> dictionary)
+        {
+            var outDictionary = new Dictionary<string, object>();
+            foreach (var key in dictionary.Keys)
+            {
+                var outKey = key;
+                if (char.IsDigit(key[0]))
+                {
+                    outKey = $"node{key}";
+                }
+                outDictionary[outKey] = dictionary[key];
+            }
+            return outDictionary;
+        }
+
+        private string PreprocessTemplate(string template)
+        {
+            // There is some quirk of the Mustache implementation that means a variable name cannot
+            // start with a number!
+            return Regex.Replace(
+                template,
+                IdReferencePattern,
+                m => $"{{{{node{m.Groups[1].Value}:{m.Groups[2].Value}}}}}"
+            );
         }
 
         public Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias)
@@ -95,15 +124,6 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private string GetTemplate(IPublishedPropertyType propertyType)
         {
             var template = (string)((Dictionary<string, object>)propertyType.DataType.Configuration)["fallbackTemplate"];
-
-            // There is some quirk of the Mustache implementation that means a variable name cannot
-            // start with a number!
-            template = Regex.Replace(
-                template,
-                IdReferencePattern,
-                m => $"{{{{node{m.Groups[1].Value}:{m.Groups[2].Value}}}}}"
-            );
-
             return template;
         }
 
@@ -121,7 +141,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             nodes.AddRange(
                 idReferences
                     .ToDictionary(
-                        id => $"node{id}", 
+                        id => $"{id}", 
                         id => publishedSnapshot.Content.GetById(id)
                     )
             );
