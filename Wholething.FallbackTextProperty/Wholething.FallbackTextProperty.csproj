@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <!-- Multi-targeting -->
   <PropertyGroup>
@@ -8,7 +8,7 @@
   <!-- NuGet package -->
   <PropertyGroup>
     <PackageId>Wholething.FallbackTextProperty</PackageId>
-    <Version>1.0</Version>
+    <Version>1.1</Version>
     <Copyright>Copyright © 2021</Copyright>
 
     <PackageIconUrl></PackageIconUrl>
@@ -20,7 +20,8 @@
     <RepositoryUrl>https://github.com/wholething/wholething-fallback-text-property</RepositoryUrl>
 
     <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
-    <PackageReleaseNotes>- Package now supports Umbraco 8 and 9 via multi-targeting</PackageReleaseNotes>
+    <PackageReleaseNotes>- Added support for node referencing functions (ancestor, root, parent, etc).
+- Package now supports Umbraco 8 and 9 via multi-targeting.</PackageReleaseNotes>
 
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
@@ -30,9 +31,9 @@
 
     <PackageOutputPath>../../output</PackageOutputPath>
 
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
 
-    <FileVersion>1.0.0.0</FileVersion>
+    <FileVersion>1.1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
