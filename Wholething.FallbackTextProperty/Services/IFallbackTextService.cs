@@ -4,14 +4,13 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 #else
 using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Core.PropertyEditors;
 #endif
 
 namespace Wholething.FallbackTextProperty.Services
 {
     public interface IFallbackTextService
     {
-        string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType);
-        Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias);
+        string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType, string culture);
+        Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias, string culture);
     }
 }

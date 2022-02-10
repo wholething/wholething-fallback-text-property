@@ -13,6 +13,7 @@ namespace Wholething.FallbackTextProperty.ValueConverters
     public class FallbackTextPropertyValueConverter : IPropertyValueConverter
     {
         private readonly IFallbackTextService _fallbackTextService;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
         public FallbackTextPropertyValueConverter(IFallbackTextService fallbackTextService)
         {
@@ -60,7 +61,9 @@ namespace Wholething.FallbackTextProperty.ValueConverters
                 return value;
             }
 
-            return _fallbackTextService.BuildValue(owner, propertyType);
+            var culture = _variationContextAccessor?.VariationContext?.Culture;
+
+            return _fallbackTextService.BuildValue(owner, propertyType, culture);
         }
 
         public object ConvertIntermediateToObject(IPublishedElement owner, IPublishedPropertyType propertyType,
