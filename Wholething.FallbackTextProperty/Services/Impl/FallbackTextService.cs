@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using HandlebarsDotNet;
 using Wholething.FallbackTextProperty.Extensions;
@@ -42,7 +43,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             dictionary = PreprocessDictionary(dictionary);
 
-            return compiled(dictionary);
+            return WebUtility.HtmlDecode(compiled(dictionary));
         }
 
         private Dictionary<string, object> PreprocessDictionary(Dictionary<string, object> dictionary)

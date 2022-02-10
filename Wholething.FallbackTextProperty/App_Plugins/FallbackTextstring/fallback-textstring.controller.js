@@ -138,7 +138,12 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function updateFallbackValue() {
-        $scope.fallback = Mustache.render(template, templateDictionary);
+        // We need to avoid HTML encoding of things like ampersand
+        var config = {
+             escape: function (text) { return text; }
+        }
+
+        $scope.fallback = Mustache.render(template, templateDictionary, null, config);
     }
 
     function addToDictionary(node, addPrefix) {
