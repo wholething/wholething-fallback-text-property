@@ -119,12 +119,10 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function getFallbackDictionary() {
-        console.log(editorState.getCurrent(), $scope.model);
-        return fallbackTextService.getTemplateData(editorState.getCurrent().id, $scope.model.alias).then(function(data) {
+        return fallbackTextService.getTemplateData(editorState.getCurrent().id, $scope.model.alias, $scope.model.culture).then(function(data) {
             templateDictionary = data;
         }, function (error) {
             templateDictionary = {};
-            console.log(error);
         });
     }
 
@@ -138,18 +136,30 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function updateFallbackValue() {
-        $scope.fallback = Mustache.render(template, templateDictionary);
+        // We need to avoid HTML encoding of things like ampersand
+        var config = {
+             escape: function (text) { return text; }
+        }
+
+        $scope.fallback = Mustache.render(template, templateDictionary, null, config);
     }
 
     function addToDictionary(node, addPrefix) {
         var prefix = addPrefix ? `${node.id}:` : '';
-        var variant = node.variants[0];
+        var variant = getVariant(node);
         templateDictionary[buildKey('name', prefix)] = variant.name;
         for (var tab of variant.tabs) {
             for (var property of tab.properties) {
                 templateDictionary[buildKey(property.alias, prefix)] = property.value;
             }
         }
+    }
+
+    function getVariant(node) {
+        if (!$scope.model.culture) {
+            return node.variants[0];
+        }
+        return node.variants.find(v => v.language.culture === $scope.model.culture);
     }
 
     function buildKey(alias, prefix) {

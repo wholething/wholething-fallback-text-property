@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using HandlebarsDotNet;
 using Wholething.FallbackTextProperty.Extensions;
@@ -31,18 +32,18 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             _referenceParser = referenceParser;
         }
 
-        public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType)
+        public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
         {
             var template = GetTemplate(propertyType);
             template = PreprocessTemplate(template);
 
-            var dictionary = BuildDictionary(owner, propertyType);
+            var dictionary = BuildDictionary(owner, propertyType, culture);
 
             var compiled = Handlebars.Compile(template);
 
             dictionary = PreprocessDictionary(dictionary);
 
-            return compiled(dictionary);
+            return WebUtility.HtmlDecode(compiled(dictionary));
         }
 
         private Dictionary<string, object> PreprocessDictionary(Dictionary<string, object> dictionary)
@@ -71,7 +72,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             );
         }
 
-        public Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias)
+        public Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias, string culture)
         {
             var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             var node = publishedSnapshot.Content.GetById(nodeId);
@@ -80,10 +81,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             var propertyType = node.Properties.First(p => p.Alias == propertyAlias).PropertyType;
 
-            return BuildDictionary(node, propertyType);
+            return BuildDictionary(node, propertyType, culture);
         }
 
-        public Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType)
+        private Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
         {
             var template = GetTemplate(propertyType);
             var dictionary = new Dictionary<string, object>();
@@ -95,7 +96,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             foreach (var publishedProperty in owner.Properties)
             {
-                var propertyValue = publishedProperty.GetSourceValue();
+                var propertyValue = publishedProperty.GetSourceValue(culture);
                 if (propertyValue is string strValue)
                 {
                     dictionary[publishedProperty.Alias] = strValue;
@@ -110,7 +111,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
                 foreach (var property in referencedNode.Properties)
                 {
-                    var propertyValue = property.GetValue();
+                    var propertyValue = property.GetValue(culture);
                     if (propertyValue is string strValue)
                     {
                         dictionary[$"{key}:{property.Alias}"] = strValue;

@@ -24,25 +24,25 @@ namespace Wholething.FallbackTextProperty.Controllers
 
 #if NET5_0_OR_GREATER
         [HttpGet]
-        public IActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias)
+        public IActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias, string culture = null)
         {
             if (!ModelState.IsValid)
             {
                 return new BadRequestResult();
             }
 
-            return new OkObjectResult(_fallbackTextService.BuildDictionary(nodeId, propertyAlias));
+            return new OkObjectResult(_fallbackTextService.BuildDictionary(nodeId, propertyAlias, culture));
         }
 #else
         [HttpGet]
-        public IHttpActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias)
+        public IHttpActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias, string culture = null)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            return Ok(_fallbackTextService.BuildDictionary(nodeId, propertyAlias));
+            return Ok(_fallbackTextService.BuildDictionary(nodeId, propertyAlias, culture));
         }
 #endif
     }

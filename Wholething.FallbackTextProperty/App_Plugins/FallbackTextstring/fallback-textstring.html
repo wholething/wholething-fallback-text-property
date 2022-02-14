@@ -2,7 +2,7 @@
     <ng-form name="fallbackTextstringForm">
 
         <div class="fallback">
-            <umb-radiobutton name="useValueRadio-{{model.alias}}"
+            <umb-radiobutton name="useValueRadio-{{model.alias}}-{{model.culture}}"
                              value="false"
                              model="useValueStr"
                              text="Default"
@@ -12,7 +12,7 @@
         </div>
 
         <div class="value">
-            <umb-radiobutton name="useValueRadio-{{model.alias}}"
+            <umb-radiobutton name="useValueRadio-{{model.alias}}-{{model.culture}}"
                              value="true"
                              model="useValueStr"
                              text="Custom"
@@ -37,7 +37,7 @@
         </div>
         
         <div class="none" ng-show="allowNone">
-            <umb-radiobutton name="useValueRadio-{{model.alias}}"
+            <umb-radiobutton name="useValueRadio-{{model.alias}}-{{model.culture}}"
                              value="<none>"
                              model="useValueStr"
                              text="None"
