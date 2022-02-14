@@ -119,12 +119,10 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function getFallbackDictionary() {
-        console.log(editorState.getCurrent(), $scope.model);
         return fallbackTextService.getTemplateData(editorState.getCurrent().id, $scope.model.alias, $scope.model.culture).then(function(data) {
             templateDictionary = data;
         }, function (error) {
             templateDictionary = {};
-            console.log(error);
         });
     }
 
