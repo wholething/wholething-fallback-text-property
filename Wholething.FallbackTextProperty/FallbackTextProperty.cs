@@ -7,19 +7,11 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Strings;
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Packaging;
-#else
-using Umbraco.Core.Migrations;
-#endif
+using Microsoft.Extensions.Options;
+using Umbraco.Cms.Core.Configuration.Models;
 
 namespace Wholething.FallbackTextProperty
 {
-    /// <summary>
-    ///  we only have this class, so there is a dll in the root
-    ///  FallbackTextProperty package.
-    ///  
-    ///  With a root dll, the package can be stopped from installing
-    ///  on .netframework sites.
-    /// </summary>
     public static class FallbackTextProperty
     {
         public static string PackageName = "Fallback Text Property";
@@ -29,9 +21,9 @@ namespace Wholething.FallbackTextProperty
     ///  A package migration plan, allows us to put FallbackTextProperty in the list 
     ///  of installed packages. we don't actually need a migration 
     ///  for FallbackTextProperty (doesn't add anything to the db). but by doing 
-    ///  this people can see that it is installed. 
+    ///  this people can see that it is installed.
+    ///  (this file is based on an example from uSync)
     /// </summary>
-#if NET5_0_OR_GREATER
     public class FallbackTextPropertyMigrationPlan : PackageMigrationPlan
     {
         public FallbackTextPropertyMigrationPlan() :
@@ -47,14 +39,15 @@ namespace Wholething.FallbackTextProperty
     public class SetupFallbackTextProperty : PackageMigrationBase
     {
         public SetupFallbackTextProperty(
-            IPackagingService packagingService,
-            IMediaService mediaService,
-            MediaFileManager mediaFileManager,
+            IPackagingService packagingService, 
+            IMediaService mediaService, 
+            MediaFileManager mediaFileManager, 
             MediaUrlGeneratorCollection mediaUrlGenerators,
             IShortStringHelper shortStringHelper,
             IContentTypeBaseServiceProvider contentTypeBaseServiceProvider,
-            IMigrationContext context)
-            : base(packagingService, mediaService, mediaFileManager, mediaUrlGenerators, shortStringHelper, contentTypeBaseServiceProvider, context)
+            IMigrationContext context,
+            IOptions<PackageMigrationSettings> packageMigrationsSettings
+        ) : base(packagingService, mediaService, mediaFileManager, mediaUrlGenerators, shortStringHelper, contentTypeBaseServiceProvider, context, packageMigrationsSettings)
         {
         }
 
@@ -64,29 +57,5 @@ namespace Wholething.FallbackTextProperty
             // on the list of installed packages. 
         }
     }
-#else
-    public class FallbackTextPropertyMigrationPlan : MigrationPlan
-    {
-        public FallbackTextPropertyMigrationPlan() :
-            base(FallbackTextProperty.PackageName)
-        {
-            To<SetupFallbackTextProperty>("0f55468d-d1bb-4ae5-ad4b-900807634894");
-        }
-
-        
-    }
-
-    public class SetupFallbackTextProperty : MigrationBase
-    {
-        public SetupFallbackTextProperty(IMigrationContext context) : base(context)
-        {
-        }
-
-        public override void Migrate()
-        {
-            // we don't actually need to do anything, but this means we end up
-            // on the list of installed packages. 
-        }
-    }
-#endif
 }
+#endif
