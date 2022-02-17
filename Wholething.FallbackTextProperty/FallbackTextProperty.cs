@@ -39,15 +39,14 @@ namespace Wholething.FallbackTextProperty
     public class SetupFallbackTextProperty : PackageMigrationBase
     {
         public SetupFallbackTextProperty(
-            IPackagingService packagingService, 
-            IMediaService mediaService, 
-            MediaFileManager mediaFileManager, 
+            IPackagingService packagingService,
+            IMediaService mediaService,
+            MediaFileManager mediaFileManager,
             MediaUrlGeneratorCollection mediaUrlGenerators,
             IShortStringHelper shortStringHelper,
             IContentTypeBaseServiceProvider contentTypeBaseServiceProvider,
-            IMigrationContext context,
-            IOptions<PackageMigrationSettings> packageMigrationsSettings
-        ) : base(packagingService, mediaService, mediaFileManager, mediaUrlGenerators, shortStringHelper, contentTypeBaseServiceProvider, context, packageMigrationsSettings)
+            IMigrationContext context)
+            : base(packagingService, mediaService, mediaFileManager, mediaUrlGenerators, shortStringHelper, contentTypeBaseServiceProvider, context)
         {
         }
 
