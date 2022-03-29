@@ -18,8 +18,7 @@
     <Authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</Authors>
 
     <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
-    <PackageReleaseNotes>- Fixed issues around multi-language support.
-- Fixed a HTML character encoding issue.</PackageReleaseNotes>
+    <PackageReleaseNotes>Added SourceLink support; Fixed issues around multi-language that meant culture wasn't always honoured.</PackageReleaseNotes>
 
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
