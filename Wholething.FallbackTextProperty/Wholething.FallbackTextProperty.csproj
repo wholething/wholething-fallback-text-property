@@ -36,9 +36,13 @@
 	<!-- SourceLink essentials-->
 	<RepositoryUrl>https://github.com/wholething/wholething-fallback-text-property</RepositoryUrl>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<DebugType>pdbonly</DebugType>
+	<Deterministic>True</Deterministic>
+
   </PropertyGroup>
 
-  <!-- Necessary for "deterministic" build -->
+  <!-- Necessary for "deterministic" build, apparently? -->
   <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
 	  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
