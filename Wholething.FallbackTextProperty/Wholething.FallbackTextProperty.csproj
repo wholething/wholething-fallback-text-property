@@ -36,7 +36,11 @@
 	<!-- SourceLink essentials-->
 	<RepositoryUrl>https://github.com/wholething/wholething-fallback-text-property</RepositoryUrl>
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
 
+  <!-- Necessary for "deterministic" build -->
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+	  <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
