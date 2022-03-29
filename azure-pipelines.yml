@@ -38,6 +38,7 @@ steps:
   inputs:
     command: 'build'
     projects: '$(packageProject)'
+    arguments: '--deterministic'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet nuget pack'
@@ -46,6 +47,7 @@ steps:
     packagesToPack: '$(packageProject)'
     versioningScheme: 'byEnvVar'
     versionEnvVar: 'NugetVersion'
+    arguments: '--include-symbols'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet nuget push'
