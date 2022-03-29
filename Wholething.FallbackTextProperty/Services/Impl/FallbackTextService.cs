@@ -111,7 +111,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
                 foreach (var property in referencedNode.Properties)
                 {
-                    var propertyValue = property.GetValue(culture);
+                    var propertyValue = property.GetSourceValue(culture);
                     if (propertyValue is string strValue)
                     {
                         dictionary[$"{key}:{property.Alias}"] = strValue;
