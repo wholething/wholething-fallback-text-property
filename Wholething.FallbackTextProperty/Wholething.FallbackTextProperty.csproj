@@ -17,8 +17,6 @@
     <PackageTags>Umbraco</PackageTags>
     <Authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</Authors>
 
-    <RepositoryUrl>https://github.com/wholething/wholething-fallback-text-property</RepositoryUrl>
-
     <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
     <PackageReleaseNotes>- Fixed issues around multi-language support.
 - Fixed a HTML character encoding issue.</PackageReleaseNotes>
@@ -34,6 +32,11 @@
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
 
     <FileVersion>1.1.0.0</FileVersion>
+
+	<!-- SourceLink essentials-->
+	<RepositoryUrl>https://github.com/wholething/wholething-fallback-text-property</RepositoryUrl>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+
   </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
