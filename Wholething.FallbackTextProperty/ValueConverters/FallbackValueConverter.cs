@@ -15,9 +15,10 @@ namespace Wholething.FallbackTextProperty.ValueConverters
         private readonly IFallbackTextService _fallbackTextService;
         private readonly IVariationContextAccessor _variationContextAccessor;
 
-        public FallbackTextPropertyValueConverter(IFallbackTextService fallbackTextService)
+        public FallbackTextPropertyValueConverter(IFallbackTextService fallbackTextService, IVariationContextAccessor variationContextAccessor)
         {
             _fallbackTextService = fallbackTextService;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
