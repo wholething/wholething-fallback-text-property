@@ -1,5 +1,10 @@
-﻿using Umbraco.Core;
+﻿#if NET5_0_OR_GREATER
+using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Extensions;
+#else
+using Umbraco.Core;
 using Umbraco.Core.Models.PublishedContent;
+#endif
 
 namespace Wholething.FallbackTextProperty.Extensions
 {
