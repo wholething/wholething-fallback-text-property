@@ -96,7 +96,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             foreach (var publishedProperty in owner.Properties)
             {
-                var propertyValue = publishedProperty.GetSourceValue();
+                var propertyValue = publishedProperty.GetSourceValueWithCulture(culture);
                 if (propertyValue is string strValue)
                 {
                     dictionary[publishedProperty.Alias] = strValue;
@@ -111,10 +111,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
                 foreach (var property in referencedNode.Properties)
                 {
-                    var propertyValue = property.GetValue();
-                    if (propertyValue is string strValue)
+                    var propertyValue = property.GetSourceValueWithCulture(culture);
+                    if (propertyValue is string strPropertyValue)
                     {
-                        dictionary[$"{key}:{property.Alias}"] = strValue;
+                        dictionary[$"{key}:{property.Alias}"] = strPropertyValue;
                     }
                 }
             }
