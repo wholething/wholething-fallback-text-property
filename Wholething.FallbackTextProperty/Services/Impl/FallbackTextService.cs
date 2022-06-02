@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -79,7 +80,12 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             if (node == null) return new Dictionary<string, object>();
 
-            var propertyType = node.Properties.First(p => p.Alias == propertyAlias).PropertyType;
+            var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAlias)?.PropertyType;
+
+            if (propertyType == null)
+            {
+                throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {nodeId} ({node.ContentType.Alias})");
+            }
 
             return BuildDictionary(node, propertyType, culture);
         }
