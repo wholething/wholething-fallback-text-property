@@ -22,7 +22,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         protected override IPublishedContent Resolve(string[] args, FallbackTextResolverContext context)
         {
-            return context.Owner.Parent;
+            return context.Element.Parent;
         }
     }
 }

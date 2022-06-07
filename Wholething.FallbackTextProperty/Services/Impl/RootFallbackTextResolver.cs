@@ -24,7 +24,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         protected override IPublishedContent Resolve(string[] args, FallbackTextResolverContext context)
         {
-            return context.Element.Root();
+            return context.Content.Root();
         }
     }
 }
