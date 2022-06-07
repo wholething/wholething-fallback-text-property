@@ -80,14 +80,29 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             if (node == null) return new Dictionary<string, object>();
 
+            return BuildDictionary(node, GetPropertyType(node, propertyAlias), culture);
+        }
+
+        public Dictionary<string, object> BuildDictionary(Guid nodeId, string propertyAlias, string culture)
+        {
+            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
+            var node = publishedSnapshot.Content.GetById(nodeId);
+
+            if (node == null) return new Dictionary<string, object>();
+
+            return BuildDictionary(node, GetPropertyType(node, propertyAlias), culture);
+        }
+
+        private IPublishedPropertyType GetPropertyType(IPublishedElement node, string propertyAlias)
+        {
             var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAlias)?.PropertyType;
 
             if (propertyType == null)
             {
-                throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {nodeId} ({node.ContentType.Alias})");
+                throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
             }
 
-            return BuildDictionary(node, propertyType, culture);
+            return propertyType;
         }
 
         private Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
@@ -134,7 +149,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return template;
         }
 
-        private Dictionary<string, IPublishedContent> GetAllReferencedNodes(string template, IPublishedContent owner)
+        private Dictionary<string, IPublishedContent> GetAllReferencedNodes(string template, IPublishedElement owner)
         {
             var nodes = new Dictionary<string, IPublishedContent>();
 
@@ -170,7 +185,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return nodeIds;
         }
 
-        private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedContent owner)
+        private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedElement owner)
         {
             // TODO: Not sure if this is necessary - shouldn't the owner always be an IPublishedContent?
             if (owner == null)
