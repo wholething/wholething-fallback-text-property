@@ -26,9 +26,9 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         {
             if (args.Length == 1)
             {
-                return context.Element.Ancestor(args[0]);
+                return context.Content.Ancestor(args[0]);
             }
-            return context.Element.Ancestor();
+            return context.Content.Ancestor();
         }
     }
 }

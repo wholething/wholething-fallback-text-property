@@ -189,8 +189,8 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedElement owner)
         {
-            // TODO: Not sure if this is necessary - shouldn't the owner always be an IPublishedContent?
-            if (owner == null)
+            // TODO: We want support elements/blocks but currently we don't
+            if (!(owner is IPublishedContent))
             {
                 return new Dictionary<string, IPublishedContent>();
             }
