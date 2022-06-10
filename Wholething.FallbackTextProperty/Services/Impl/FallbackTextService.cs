@@ -113,6 +113,8 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             foreach (var (key, referencedNode) in referencedNodes)
             {
+                if (referencedNode == null) continue;
+
                 dictionary.Add($"{key}:name", referencedNode.Name);
 
                 foreach (var property in referencedNode.Properties)
