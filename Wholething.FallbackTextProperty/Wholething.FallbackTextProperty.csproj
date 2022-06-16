@@ -8,8 +8,8 @@
   <!-- NuGet package -->
   <PropertyGroup>
     <PackageId>Wholething.FallbackTextProperty</PackageId>
-    <Version>1.1</Version>
-    <Copyright>Copyright © 2021</Copyright>
+    <Version>1.2</Version>
+    <Copyright></Copyright>
 
     <PackageIconUrl></PackageIconUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
@@ -18,7 +18,14 @@
     <Authors>Harry Gordon and Wholething (Dean Leigh and Ault Nathanielsz)</Authors>
 
     <Description>FallbackTextProperty is an Umbraco property editor that defines a fallback/default value that users can optionally override.</Description>
-    <PackageReleaseNotes>Added SourceLink support; Fixed issues around multi-language that meant culture wasn't always honoured.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+		### Version 1.2
+		- Fixed issues around multi-language sites that meant some fallback values were not rendering
+        - Fallbacks inside blocks/nested elements are still not supported but shouldn't cause errors
+
+		### Version 1.1
+		- Added SourceLink support
+	</PackageReleaseNotes>
 
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
     <IncludeSymbols>true</IncludeSymbols>
