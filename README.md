@@ -6,6 +6,14 @@ The fallback can be built from other node properties and properties of other spe
 
 If you like this property editor you may also like [Wholething.FallbackImagePickerProperty](https://github.com/wholething/wholething-fallback-image-picker-property).
 
+## 🛠👷‍♀️ Known issues
+
+There are a number of known issues so please check the [issue tracker](https://github.com/wholething/wholething-fallback-text-property/issues) when in doubt.
+
+### Blocks and nested content
+
+- [Blocks and nested content](https://github.com/wholething/wholething-fallback-text-property/issues/24)  are currently unsupported but we are actively working on this issue.
+
 ## Use-case
 
 The use-case for this package is simple: editors often want the option to override images/values but it is unclear what the default value is. We feel it's a significant improvement in experience for editors to be able to see the default value before deciding to override it.

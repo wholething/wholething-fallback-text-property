@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Wholething.FallbackTextProperty.Services;
 #if NET5_0_OR_GREATER
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace Wholething.FallbackTextProperty.Controllers
 
 #if NET5_0_OR_GREATER
         [HttpGet]
-        public IActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias, string culture = null)
+        public IActionResult Get([Required] Guid nodeId, [Required] string propertyAlias, string culture = null)
         {
             if (!ModelState.IsValid)
             {
@@ -35,7 +36,7 @@ namespace Wholething.FallbackTextProperty.Controllers
         }
 #else
         [HttpGet]
-        public IHttpActionResult Get([Required][Range(1, int.MaxValue)] int nodeId, [Required] string propertyAlias, string culture = null)
+        public IHttpActionResult Get([Required] Guid nodeId, [Required] string propertyAlias, string culture = null)
         {
             if (!ModelState.IsValid)
             {

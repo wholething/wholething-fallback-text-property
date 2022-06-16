@@ -8,11 +8,12 @@ namespace Wholething.FallbackTextProperty.Services.Models
 {
     public class FallbackTextResolverContext
     {
-        public FallbackTextResolverContext(IPublishedContent owner)
+        public FallbackTextResolverContext(IPublishedElement element)
         {
-            Owner = owner;
+            Element = element;
         }
 
-        public IPublishedContent Owner { get; set; }
+        public IPublishedElement Element { get; set; }
+        public IPublishedContent Content => Element as IPublishedContent;
     }
 }

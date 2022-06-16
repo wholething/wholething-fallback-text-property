@@ -1,11 +1,13 @@
 ﻿var umbraco = angular.module('umbraco');
 
-umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', 'contentResource', 'editorState', 'fallbackTextService', function ($scope, assetsService, contentResource, editorState, fallbackTextService) {
+umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', 'contentResource', 'editorState', 'fallbackTextService', 'notificationsService', function ($scope, assetsService, contentResource, editorState, fallbackTextService, notificationsService) {
 
     var templateDictionary = null;
     var template;
 
     var form = null;
+
+    var block = null;
 
     var noneValue = '<none>';
     $scope.noneValue = noneValue;
@@ -57,6 +59,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     $scope.model.onValueChanged = $scope.change;
 
     function init() {
+        block = fallbackTextService.getBlock();
+
         $('.umb-property-editor input').change(function () {
             updateFallbackDictionary();
         });
@@ -118,10 +122,15 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
         $scope.validLength = $scope.maxChars ? $scope.charsCount <= $scope.maxChars : true;
     }
 
+    function getContent() {
+        return block ?? editorState.getCurrent();
+    }
+
     function getFallbackDictionary() {
-        return fallbackTextService.getTemplateData(editorState.getCurrent().id, $scope.model.alias, $scope.model.culture).then(function(data) {
+        return fallbackTextService.getTemplateData(getContent().key, $scope.model.alias, $scope.model.culture).then(function(data) {
             templateDictionary = data;
         }, function (error) {
+            notificationsService.error('Fallback error', `Couldn\'t load dictionary for property (alias: \"${$scope.model.alias}\", node: ${getContent().key})`);
             templateDictionary = {};
         });
     }
@@ -129,7 +138,7 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     function updateFallbackDictionary() {
         templateDictionaryPromise.then(function() {
             // Add current node to the template dictionary
-            addToDictionary(editorState.getCurrent());
+            addToDictionary(getContent());
 
             updateFallbackValue();
         });
@@ -156,7 +165,8 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function getVariant(node) {
-        if (!$scope.model.culture) {
+        // Blocks don't have language variants
+        if (!$scope.model.culture || block) {
             return node.variants[0];
         }
         return node.variants.find(v => v.language.culture === $scope.model.culture);

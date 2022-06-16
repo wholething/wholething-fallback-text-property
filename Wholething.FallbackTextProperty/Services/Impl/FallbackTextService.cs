@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -79,9 +80,29 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             if (node == null) return new Dictionary<string, object>();
 
-            var propertyType = node.Properties.First(p => p.Alias == propertyAlias).PropertyType;
+            return BuildDictionary(node, GetPropertyType(node, propertyAlias), culture);
+        }
 
-            return BuildDictionary(node, propertyType, culture);
+        public Dictionary<string, object> BuildDictionary(Guid nodeId, string propertyAlias, string culture)
+        {
+            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
+            var node = publishedSnapshot.Content.GetById(nodeId);
+
+            if (node == null) return new Dictionary<string, object>();
+
+            return BuildDictionary(node, GetPropertyType(node, propertyAlias), culture);
+        }
+
+        private IPublishedPropertyType GetPropertyType(IPublishedElement node, string propertyAlias)
+        {
+            var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAlias)?.PropertyType;
+
+            if (propertyType == null)
+            {
+                throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
+            }
+
+            return propertyType;
         }
 
         private Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
@@ -96,7 +117,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             foreach (var publishedProperty in owner.Properties)
             {
-                var propertyValue = publishedProperty.GetSourceValue(culture);
+                var propertyValue = publishedProperty.GetSourceValueWithCulture(culture);
                 if (propertyValue is string strValue)
                 {
                     dictionary[publishedProperty.Alias] = strValue;
@@ -107,14 +128,16 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             foreach (var (key, referencedNode) in referencedNodes)
             {
+                if (referencedNode == null) continue;
+
                 dictionary.Add($"{key}:name", referencedNode.Name);
 
                 foreach (var property in referencedNode.Properties)
                 {
-                    var propertyValue = property.GetValue(culture);
-                    if (propertyValue is string strValue)
+                    var propertyValue = property.GetSourceValueWithCulture(culture);
+                    if (propertyValue is string strPropertyValue)
                     {
-                        dictionary[$"{key}:{property.Alias}"] = strValue;
+                        dictionary[$"{key}:{property.Alias}"] = strPropertyValue;
                     }
                 }
             }
@@ -128,7 +151,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return template;
         }
 
-        private Dictionary<string, IPublishedContent> GetAllReferencedNodes(string template, IPublishedContent owner)
+        private Dictionary<string, IPublishedContent> GetAllReferencedNodes(string template, IPublishedElement owner)
         {
             var nodes = new Dictionary<string, IPublishedContent>();
 
@@ -164,10 +187,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return nodeIds;
         }
 
-        private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedContent owner)
+        private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedElement owner)
         {
-            // TODO: Not sure if this is necessary - shouldn't the owner always be an IPublishedContent?
-            if (owner == null)
+            // TODO: We want support elements/blocks but currently we don't
+            if (!(owner is IPublishedContent))
             {
                 return new Dictionary<string, IPublishedContent>();
             }

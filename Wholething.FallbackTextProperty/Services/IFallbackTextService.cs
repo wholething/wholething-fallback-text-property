@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 #if NET5_0_OR_GREATER
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
@@ -12,5 +13,6 @@ namespace Wholething.FallbackTextProperty.Services
     {
         string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType, string culture);
         Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias, string culture);
+        Dictionary<string, object> BuildDictionary(Guid nodeId, string propertyAlias, string culture);
     }
 }
