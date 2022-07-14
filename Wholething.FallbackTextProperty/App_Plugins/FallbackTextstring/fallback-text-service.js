@@ -1,7 +1,7 @@
 ﻿var umbraco = angular.module('umbraco');
 
 umbraco.factory('fallbackTextService', ['$http', 'eventsService', 'notificationsService', function ($http, eventsService, notificationsService) {
-    var baseUrl = '/Umbraco/FallbackText';
+    var baseUrl = '/Umbraco/Backoffice/FallbackText';
 
     var block = null;
 
@@ -29,10 +29,6 @@ umbraco.factory('fallbackTextService', ['$http', 'eventsService', 'notifications
             }
         }
     );
-
-    //$scope.onDestroy = function () {
-    //    editorOpenUnsubscribe();
-    //}
 
     function getTemplateData(nodeId, propertyAlias, culture) {
         console.log('getTemplateData', nodeId, propertyAlias);
