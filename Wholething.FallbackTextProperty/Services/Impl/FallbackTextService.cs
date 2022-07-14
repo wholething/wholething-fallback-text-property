@@ -7,11 +7,17 @@ using HandlebarsDotNet;
 using Wholething.FallbackTextProperty.Extensions;
 using Wholething.FallbackTextProperty.Services.Models;
 #if NET5_0_OR_GREATER
+using Umbraco.Cms.Core.PropertyEditors;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PublishedCache;
+using Umbraco.Cms.Core.Models.Blocks;
 #else
 using Umbraco.Core;
+using Umbraco.Core.Services;
+using Umbraco.Core.Models.Blocks;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Web.PropertyEditors;
 using Umbraco.Web.PublishedCache;
 #endif
 
@@ -24,21 +30,26 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
         private readonly IFallbackTextReferenceParser _referenceParser;
 
+        private readonly IContentTypeService _contentTypeService;
+        private readonly IDataTypeService _dataTypeService;
+
         private const string IdReferencePattern = @"{{(?>node)?([0-9]+):(\w+)}}";
 
-        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, IFallbackTextReferenceParser referenceParser)
+        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, IFallbackTextReferenceParser referenceParser, IContentTypeService contentTypeService, IDataTypeService dataTypeService)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
             _resolvers = resolvers;
             _referenceParser = referenceParser;
+            _contentTypeService = contentTypeService;
+            _dataTypeService = dataTypeService;
         }
 
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
         {
-            var template = GetTemplate(propertyType);
+            var template = GetTemplate(propertyType.DataType.Configuration);
             template = PreprocessTemplate(template);
 
-            var dictionary = BuildDictionary(owner, propertyType, culture);
+            var dictionary = BuildDictionary(owner, propertyType.DataType.Configuration, culture);
 
             var compiled = Handlebars.Compile(template);
 
@@ -73,41 +84,76 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             );
         }
 
-        public Dictionary<string, object> BuildDictionary(int nodeId, string propertyAlias, string culture)
+        public Dictionary<string, object> BuildDictionary(Guid nodeId, Guid? blockId, string propertyAlias, string culture)
         {
             var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             var node = publishedSnapshot.Content.GetById(nodeId);
+            var block = !blockId.HasValue ? null : GetBlockFromNode(node, blockId.Value);
 
             if (node == null) return new Dictionary<string, object>();
 
-            return BuildDictionary(node, GetPropertyType(node, propertyAlias), culture);
+            return BuildDictionary(node, GetDataTypeConfiguration(block ?? node, propertyAlias), culture);
         }
 
-        public Dictionary<string, object> BuildDictionary(Guid nodeId, string propertyAlias, string culture)
+        private IPublishedElement GetBlockFromNode(IPublishedContent node, Guid blockId)
         {
-            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
-            var node = publishedSnapshot.Content.GetById(nodeId);
-
-            if (node == null) return new Dictionary<string, object>();
-
-            return BuildDictionary(node, GetPropertyType(node, propertyAlias), culture);
-        }
-
-        private IPublishedPropertyType GetPropertyType(IPublishedElement node, string propertyAlias)
-        {
-            var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAlias)?.PropertyType;
-
-            if (propertyType == null)
+            foreach (var publishedProperty in node.Properties)
             {
-                throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
+                if (publishedProperty.PropertyType.ClrType == typeof(BlockListModel))
+                {
+                    var blockList = (BlockListModel) publishedProperty.GetValue();
+                    foreach (var blockListItem in blockList)
+                    {
+                        if (blockListItem.Content.Key == blockId) return blockListItem.Content;
+                    }
+                }
             }
 
-            return propertyType;
+            throw new ArgumentException($"Couldn't find block {blockId} on node {node.Name}");
         }
 
-        private Dictionary<string, object> BuildDictionary(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
+        private object GetDataTypeConfiguration(IPublishedElement node, string propertyAlias)
         {
-            var template = GetTemplate(propertyType);
+            if (propertyAlias.Contains("__"))
+            {
+                var propertyAliases = propertyAlias.Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+
+                var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAliases[0])?.PropertyType;
+
+                var config = propertyType.DataType.Configuration as NestedContentConfiguration;
+
+                var contentTypes = config.ContentTypes;
+
+                foreach (var contentTypeStub in contentTypes)
+                {
+                    var contentType = _contentTypeService.Get(contentTypeStub.Alias);
+                    var elementPropertyType = contentType.PropertyGroups
+                        .SelectMany(x => x.PropertyTypes)
+                        .FirstOrDefault(p => p.Alias == propertyAliases[1]);
+                    if (elementPropertyType != null)
+                    {
+                        return _dataTypeService.GetDataType(elementPropertyType.DataTypeKey).Configuration;
+                    }
+                }
+                
+                throw new ArgumentException($"No element property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
+            }
+            else
+            {
+                var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAlias)?.PropertyType;
+
+                if (propertyType == null)
+                {
+                    throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
+                }
+
+                return propertyType.DataType.Configuration;
+            }
+        }
+
+        private Dictionary<string, object> BuildDictionary(IPublishedElement owner, object dataTypeConfiguration, string culture)
+        {
+            var template = GetTemplate(dataTypeConfiguration);
             var dictionary = new Dictionary<string, object>();
 
             if (owner is IPublishedContent node)
@@ -145,9 +191,9 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return dictionary;
         }
 
-        private string GetTemplate(IPublishedPropertyType propertyType)
+        private string GetTemplate(object configuration)
         {
-            var template = (string)((Dictionary<string, object>)propertyType.DataType.Configuration)["fallbackTemplate"];
+            var template = (string)((Dictionary<string, object>)configuration)["fallbackTemplate"];
             return template;
         }
 
