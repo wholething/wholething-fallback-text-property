@@ -51,32 +51,25 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             template = PreprocessTemplate(template);
 
             var dictionary = BuildDictionary(owner, propertyType.DataType.Configuration, culture);
+            dictionary = PreprocessDictionary(dictionary);
 
             var handlebars = Handlebars.Create(new HandlebarsConfiguration()
             {
-                MissingPartialTemplateHandler = new LogMissingPartialTemplateHandler(_logger)
+                ThrowOnUnresolvedBindingExpression = true
             });
-            
-            var compiled = handlebars.Compile(template);
 
-            dictionary = PreprocessDictionary(dictionary);
-
-            return WebUtility.HtmlDecode(compiled(dictionary));
-        }
-
-        private class LogMissingPartialTemplateHandler : IMissingPartialTemplateHandler
-        {
-
-            private readonly IFallbackTextLoggerService _logger;
-
-            public LogMissingPartialTemplateHandler(IFallbackTextLoggerService logger)
+            try
             {
-                _logger = logger;
+                var compiled = handlebars.Compile(template);
+                return WebUtility.HtmlDecode(compiled(dictionary));
             }
-
-            public void Handle(ICompiledHandlebarsConfiguration configuration, string partialName, in EncodedTextWriter textWriter)
+            catch (Exception ex)
             {
-                _logger.LogWarning("Fallback text template value missing: {0}. Template: \"{1}\"", partialName, textWriter.ToString());
+                _logger.LogWarning(ex, "Fallback text template value missing (node couldn't be found or function didn't resolve)");
+
+                // Do best effort rendering
+                var compiled = Handlebars.Compile(template);
+                return WebUtility.HtmlDecode(compiled(dictionary));
             }
         }
 

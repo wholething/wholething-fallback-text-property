@@ -19,12 +19,12 @@ namespace Wholething.FallbackTextProperty.Composers
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddSingleton<IFallbackTextService, FallbackTextService>();
+            builder.Services.AddSingleton<IFallbackTextReferenceParser, FallbackTextReferenceParser>();
+            builder.Services.AddSingleton<IFallbackTextLoggerService, FallbackTextLoggerService>();
 
             builder.Services.AddSingleton<IFallbackTextResolver, ParentFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, RootFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, AncestorFallbackTextResolver>();
-
-            builder.Services.AddSingleton<IFallbackTextReferenceParser, FallbackTextReferenceParser>();
         }
     }
 #else
@@ -34,6 +34,7 @@ namespace Wholething.FallbackTextProperty.Composers
         {
             composition.Register(typeof(IFallbackTextService), typeof(FallbackTextService), Lifetime.Singleton);
             composition.Register(typeof(IFallbackTextReferenceParser), typeof(FallbackTextReferenceParser), Lifetime.Singleton);
+            composition.Register(typeof(IFallbackTextLoggerService), typeof(FallbackTextLoggerService), Lifetime.Singleton);
         }
     }
 #endif
