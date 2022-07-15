@@ -34,8 +34,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private readonly IDataTypeService _dataTypeService;
 
         private const string IdReferencePattern = @"{{(?>node)?([0-9]+):(\w+)}}";
+        private const string GuidReferencePattern = @"(?im)[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}";
 
-        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, IFallbackTextReferenceParser referenceParser, IContentTypeService contentTypeService, IDataTypeService dataTypeService)
+        public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, 
+            IFallbackTextReferenceParser referenceParser, IContentTypeService contentTypeService, IDataTypeService dataTypeService)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
             _resolvers = resolvers;
@@ -92,7 +94,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             if (node == null) return new Dictionary<string, object>();
 
-            return BuildDictionary(node, GetDataTypeConfiguration(block ?? node, propertyAlias), culture);
+            return BuildDictionary(block ?? node, GetDataTypeConfiguration(block ?? node, propertyAlias), culture);
         }
 
         private IPublishedElement GetBlockFromNode(IPublishedContent node, Guid blockId)
@@ -130,6 +132,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                     var elementPropertyType = contentType.PropertyGroups
                         .SelectMany(x => x.PropertyTypes)
                         .FirstOrDefault(p => p.Alias == propertyAliases[1]);
+
                     if (elementPropertyType != null)
                     {
                         return _dataTypeService.GetDataType(elementPropertyType.DataTypeKey).Configuration;
@@ -170,7 +173,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                 }
             }
             
-            var referencedNodes = GetAllReferencedNodes(template, owner as IPublishedContent);
+            var referencedNodes = GetAllReferencedNodes(template, owner);
 
             foreach (var (key, referencedNode) in referencedNodes)
             {
@@ -200,18 +203,25 @@ namespace Wholething.FallbackTextProperty.Services.Impl
         private Dictionary<string, IPublishedContent> GetAllReferencedNodes(string template, IPublishedElement owner)
         {
             var nodes = new Dictionary<string, IPublishedContent>();
-
-            if (owner != null)
-            {
-                nodes.AddRange(GetFunctionReferences(template, owner));
-            }
+            
+            nodes.AddRange(GetFunctionReferences(template, owner));
+            
+            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
 
             var idReferences = GetIdReferences(template);
-            var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             nodes.AddRange(
                 idReferences
                     .ToDictionary(
-                        id => $"{id}", 
+                        id => id.ToString(), 
+                        id => publishedSnapshot.Content.GetById(id)
+                    )
+            );
+
+            var guidReferences = GetGuidReferences(template);
+            nodes.AddRange(
+                guidReferences
+                    .ToDictionary(
+                        id => id.ToString(),
                         id => publishedSnapshot.Content.GetById(id)
                     )
             );
@@ -224,23 +234,31 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             var regex = new Regex(IdReferencePattern);
             var matches = regex.Matches(template);
 
-            var nodeIds = new List<int>();
+            var ids = new List<int>();
             foreach (Match match in matches)
             {
-                nodeIds.Add(int.Parse(match.Groups[1].Value));
+                ids.Add(int.Parse(match.Groups[1].Value));
             }
 
-            return nodeIds;
+            return ids;
+        }
+
+        private List<Guid> GetGuidReferences(string template)
+        {
+            var regex = new Regex(GuidReferencePattern);
+            var matches = regex.Matches(template);
+
+            var guids = new List<Guid>();
+            foreach (Match match in matches)
+            {
+                guids.Add(Guid.Parse(match.Groups[0].Value));
+            }
+
+            return guids;
         }
 
         private Dictionary<string, IPublishedContent> GetFunctionReferences(string template, IPublishedElement owner)
         {
-            // TODO: We want support elements/blocks but currently we don't
-            if (!(owner is IPublishedContent))
-            {
-                return new Dictionary<string, IPublishedContent>();
-            }
-
             var references = _referenceParser.Parse(template);
 
             var resolverContext = new FallbackTextResolverContext(owner);
@@ -256,7 +274,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         private IPublishedContent TryResolve(FallbackTextFunctionReference reference, FallbackTextResolverContext context)
         {
-            var resolver = _resolvers.FirstOrDefault(r => r.CanResolve(reference));
+            var resolver = _resolvers.FirstOrDefault(r => r.CanResolve(reference, context));
             return resolver?.Resolve(reference, context);
         }
     }
