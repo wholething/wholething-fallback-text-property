@@ -33,15 +33,6 @@ namespace Wholething.FallbackTextProperty.Composers
         public void Compose(Composition composition)
         {
             composition.Register(typeof(IFallbackTextService), typeof(FallbackTextService), Lifetime.Singleton);
-
-            var resolvers = new List<IFallbackTextResolver>
-            {
-                new ParentFallbackTextResolver(),
-                new AncestorFallbackTextResolver(),
-                new RootFallbackTextResolver()
-            };
-            composition.Register(typeof(IEnumerable<IFallbackTextResolver>), resolvers);
-
             composition.Register(typeof(IFallbackTextReferenceParser), typeof(FallbackTextReferenceParser), Lifetime.Singleton);
         }
     }
