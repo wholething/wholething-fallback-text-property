@@ -12,6 +12,10 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public class AncestorFallbackTextResolver : FallbackTextResolver
     {
+        public AncestorFallbackTextResolver(IFallbackTextLoggerService logger) : base(logger)
+        {
+        }
+
         protected override string FunctionName => "ancestor";
         protected override bool RequireContent => true;
 

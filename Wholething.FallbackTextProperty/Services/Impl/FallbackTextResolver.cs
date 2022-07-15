@@ -10,6 +10,13 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public abstract class FallbackTextResolver : IFallbackTextResolver
     {
+        protected readonly IFallbackTextLoggerService Logger;
+
+        protected FallbackTextResolver(IFallbackTextLoggerService logger)
+        {
+            Logger = logger;
+        }
+
         protected abstract string FunctionName { get; }
         protected abstract bool RequireContent { get; }
 
@@ -23,8 +30,9 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             {
                 CheckArguments(reference.Args, context);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Logger.LogWarning(ex, "Fallback text resolver couldn't be used (see exception detail)");
                 return false;
             }
             return true;

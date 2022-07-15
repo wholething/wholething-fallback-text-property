@@ -7,7 +7,6 @@ using HandlebarsDotNet;
 using Wholething.FallbackTextProperty.Extensions;
 using Wholething.FallbackTextProperty.Services.Models;
 #if NET5_0_OR_GREATER
-using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PublishedCache;
@@ -17,7 +16,6 @@ using Umbraco.Core;
 using Umbraco.Core.Services;
 using Umbraco.Core.Models.Blocks;
 using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web.PropertyEditors;
 using Umbraco.Web.PublishedCache;
 #endif
 
@@ -29,21 +27,22 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         private readonly IEnumerable<IFallbackTextResolver> _resolvers;
         private readonly IFallbackTextReferenceParser _referenceParser;
-
-        private readonly IContentTypeService _contentTypeService;
+        
         private readonly IDataTypeService _dataTypeService;
+        
+        private readonly IFallbackTextLoggerService _logger;
 
         private const string IdReferencePattern = @"{{(?>node)?([0-9]+):(\w+)}}";
         private const string GuidReferencePattern = @"(?im)[0-9A-F]{8}[-]?(?:[0-9A-F]{4}[-]?){3}[0-9A-F]{12}";
 
         public FallbackTextService(IPublishedSnapshotAccessor publishedSnapshotAccessor, IEnumerable<IFallbackTextResolver> resolvers, 
-            IFallbackTextReferenceParser referenceParser, IContentTypeService contentTypeService, IDataTypeService dataTypeService)
+            IFallbackTextReferenceParser referenceParser, IDataTypeService dataTypeService, IFallbackTextLoggerService logger)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
             _resolvers = resolvers;
             _referenceParser = referenceParser;
-            _contentTypeService = contentTypeService;
             _dataTypeService = dataTypeService;
+            _logger = logger;
         }
 
         public string BuildValue(IPublishedElement owner, IPublishedPropertyType propertyType, string culture)
@@ -53,11 +52,32 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             var dictionary = BuildDictionary(owner, propertyType.DataType.Configuration, culture);
 
-            var compiled = Handlebars.Compile(template);
+            var handlebars = Handlebars.Create(new HandlebarsConfiguration()
+            {
+                MissingPartialTemplateHandler = new LogMissingPartialTemplateHandler(_logger)
+            });
+            
+            var compiled = handlebars.Compile(template);
 
             dictionary = PreprocessDictionary(dictionary);
 
             return WebUtility.HtmlDecode(compiled(dictionary));
+        }
+
+        private class LogMissingPartialTemplateHandler : IMissingPartialTemplateHandler
+        {
+
+            private readonly IFallbackTextLoggerService _logger;
+
+            public LogMissingPartialTemplateHandler(IFallbackTextLoggerService logger)
+            {
+                _logger = logger;
+            }
+
+            public void Handle(ICompiledHandlebarsConfiguration configuration, string partialName, in EncodedTextWriter textWriter)
+            {
+                _logger.LogWarning("Fallback text template value missing: {0}. Template: \"{1}\"", partialName, textWriter.ToString());
+            }
         }
 
         private Dictionary<string, object> PreprocessDictionary(Dictionary<string, object> dictionary)

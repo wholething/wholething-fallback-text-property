@@ -10,6 +10,11 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public class ParentFallbackTextResolver : FallbackTextResolver
     {
+        public ParentFallbackTextResolver(IFallbackTextLoggerService logger) : base(logger)
+        {
+        }
+
+
         protected override string FunctionName => "parent";
         protected override bool RequireContent => true;
 

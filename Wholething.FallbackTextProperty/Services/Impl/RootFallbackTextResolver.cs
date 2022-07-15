@@ -16,7 +16,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
     {
         private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
 
-        public RootFallbackTextResolver(IPublishedSnapshotAccessor publishedSnapshotAccessor)
+        public RootFallbackTextResolver(IFallbackTextLoggerService logger, IPublishedSnapshotAccessor publishedSnapshotAccessor) : base(logger)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
         }
