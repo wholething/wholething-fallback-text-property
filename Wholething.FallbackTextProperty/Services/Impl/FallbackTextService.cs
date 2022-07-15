@@ -86,7 +86,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             );
         }
 
-        public Dictionary<string, object> BuildDictionary(Guid nodeId, Guid? blockId, string propertyAlias, string culture)
+        public Dictionary<string, object> BuildDictionary(Guid nodeId, Guid? blockId, Guid dataTypeAlias, string culture)
         {
             var publishedSnapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
             var node = publishedSnapshot.Content.GetById(nodeId);
@@ -94,7 +94,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
             if (node == null) return new Dictionary<string, object>();
 
-            return BuildDictionary(block ?? node, GetDataTypeConfiguration(block ?? node, propertyAlias), culture);
+            return BuildDictionary(blockId.HasValue ? block : node, GetDataTypeConfiguration(dataTypeAlias), culture);
         }
 
         private IPublishedElement GetBlockFromNode(IPublishedContent node, Guid blockId)
@@ -111,47 +111,12 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                 }
             }
 
-            throw new ArgumentException($"Couldn't find block {blockId} on node {node.Name}");
+            return null;
         }
 
-        private object GetDataTypeConfiguration(IPublishedElement node, string propertyAlias)
+        private object GetDataTypeConfiguration(Guid dataTypeKey)
         {
-            if (propertyAlias.Contains("__"))
-            {
-                var propertyAliases = propertyAlias.Split("_".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
-
-                var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAliases[0])?.PropertyType;
-
-                var config = propertyType.DataType.Configuration as NestedContentConfiguration;
-
-                var contentTypes = config.ContentTypes;
-
-                foreach (var contentTypeStub in contentTypes)
-                {
-                    var contentType = _contentTypeService.Get(contentTypeStub.Alias);
-                    var elementPropertyType = contentType.PropertyGroups
-                        .SelectMany(x => x.PropertyTypes)
-                        .FirstOrDefault(p => p.Alias == propertyAliases[1]);
-
-                    if (elementPropertyType != null)
-                    {
-                        return _dataTypeService.GetDataType(elementPropertyType.DataTypeKey).Configuration;
-                    }
-                }
-                
-                throw new ArgumentException($"No element property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
-            }
-            else
-            {
-                var propertyType = node.Properties.FirstOrDefault(p => p.Alias == propertyAlias)?.PropertyType;
-
-                if (propertyType == null)
-                {
-                    throw new ArgumentException($"No property \"{propertyAlias}\" exists on node {node.Key} ({node.ContentType.Alias})");
-                }
-
-                return propertyType.DataType.Configuration;
-            }
+            return _dataTypeService.GetDataType(dataTypeKey).Configuration;
         }
 
         private Dictionary<string, object> BuildDictionary(IPublishedElement owner, object dataTypeConfiguration, string culture)
@@ -164,15 +129,18 @@ namespace Wholething.FallbackTextProperty.Services.Impl
                 dictionary.Add("name", node.Name);
             }
 
-            foreach (var publishedProperty in owner.Properties)
+            if (owner != null)
             {
-                var propertyValue = publishedProperty.GetSourceValueWithCulture(culture);
-                if (propertyValue is string strValue)
+                foreach (var publishedProperty in owner.Properties)
                 {
-                    dictionary[publishedProperty.Alias] = strValue;
+                    var propertyValue = publishedProperty.GetSourceValueWithCulture(culture);
+                    if (propertyValue is string strValue)
+                    {
+                        dictionary[publishedProperty.Alias] = strValue;
+                    }
                 }
             }
-            
+
             var referencedNodes = GetAllReferencedNodes(template, owner);
 
             foreach (var (key, referencedNode) in referencedNodes)
