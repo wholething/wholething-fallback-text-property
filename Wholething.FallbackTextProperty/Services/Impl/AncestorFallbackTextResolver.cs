@@ -13,9 +13,12 @@ namespace Wholething.FallbackTextProperty.Services.Impl
     public class AncestorFallbackTextResolver : FallbackTextResolver
     {
         protected override string FunctionName => "ancestor";
+        protected override bool RequireContent => true;
 
-        public override void CheckArguments(string[] args)
+        public override void CheckArguments(string[] args, FallbackTextResolverContext context)
         {
+            base.CheckArguments(args, context);
+
             if (args.Length > 1)
             {
                 throw new ArgumentException($"{FunctionName} expects 0 or 1 arguments");

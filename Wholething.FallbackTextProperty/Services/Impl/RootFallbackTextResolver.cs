@@ -1,21 +1,33 @@
 ﻿using System;
+using System.Linq;
+using Wholething.FallbackTextProperty.Extensions;
 using Wholething.FallbackTextProperty.Services.Models;
 #if NET5_0_OR_GREATER
+using Umbraco.Cms.Core.PublishedCache;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
 #else
+using Umbraco.Web.PublishedCache;
 using Umbraco.Core.Models.PublishedContent;
-using Umbraco.Web;
 #endif
 
 namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public class RootFallbackTextResolver : FallbackTextResolver
     {
-        protected override string FunctionName => "root";
+        private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
 
-        public override void CheckArguments(string[] args)
+        public RootFallbackTextResolver(IPublishedSnapshotAccessor publishedSnapshotAccessor)
         {
+            _publishedSnapshotAccessor = publishedSnapshotAccessor;
+        }
+
+        protected override string FunctionName => "root";
+        protected override bool RequireContent => false;
+
+        public override void CheckArguments(string[] args, FallbackTextResolverContext context)
+        {
+            base.CheckArguments(args, context);
+
             if (args.Length > 0)
             {
                 throw new ArgumentException("Did not expect any arguments");
@@ -24,7 +36,8 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 
         protected override IPublishedContent Resolve(string[] args, FallbackTextResolverContext context)
         {
-            return context.Content.Root();
+            var snapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
+            return snapshot.Content.GetAtRoot().First();
         }
     }
 }

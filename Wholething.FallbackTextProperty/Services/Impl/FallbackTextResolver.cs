@@ -11,8 +11,9 @@ namespace Wholething.FallbackTextProperty.Services.Impl
     public abstract class FallbackTextResolver : IFallbackTextResolver
     {
         protected abstract string FunctionName { get; }
+        protected abstract bool RequireContent { get; }
 
-        public bool CanResolve(FallbackTextFunctionReference reference)
+        public bool CanResolve(FallbackTextFunctionReference reference, FallbackTextResolverContext context)
         {
             if (reference.Function != FunctionName)
             {
@@ -20,7 +21,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             }
             try
             {
-                CheckArguments(reference.Args);
+                CheckArguments(reference.Args, context);
             }
             catch (Exception)
             {
@@ -29,7 +30,13 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             return true;
         }
 
-        public abstract void CheckArguments(string[] args);
+        public virtual void CheckArguments(string[] args, FallbackTextResolverContext context)
+        {
+            if (RequireContent && context.Content == null)
+            {
+                throw new ArgumentException("Expected content, not an element type (block or element)");
+            }
+        }
 
         public IPublishedContent Resolve(FallbackTextFunctionReference reference, FallbackTextResolverContext context)
         {
