@@ -43,6 +43,7 @@ The fallback template supports the following node references:
 - Parent node: `{{parent:propertyAlias}}`
 - Root node: `{{root:propertyAlias}}`
 - Ancestor by content type alias: `{{ancestor(blogPost):propertyAlias}}`
+- Node by URL: `{{url(/global-settings/):propertyAlias}}`
 
 ## Implementation
 
