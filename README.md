@@ -12,7 +12,9 @@ There are a number of known issues so please check the [issue tracker](https://g
 
 ### Blocks and nested content
 
-- [Blocks and nested content](https://github.com/wholething/wholething-fallback-text-property/issues/24)  are currently unsupported but we are actively working on this issue.
+Blocks and nested content only have limited support since we can't retrieve an element's parent/owner in the value converter. The following references do work:
+- Referring to other nodes by ID
+- `root` and `url` functions
 
 ## Use-case
 
@@ -40,16 +42,21 @@ In the example we use the following template: `{{1104:heroHeader}} - {{pageTitle
 
 The fallback template supports the following node references:
 - Node ID: `{{1069:propertyAlias}}`
+- Node key: `{{25eb6a38-50e0-4c1b-95d8-1526d54b06e5:propertyAlias}}`
 - Parent node: `{{parent:propertyAlias}}`
 - Root node: `{{root:propertyAlias}}`
 - Ancestor by content type alias: `{{ancestor(blogPost):propertyAlias}}`
 - Node by URL: `{{url(/global-settings/):propertyAlias}}`
 
+### Debugging
+
+As of version 1.3 we now log any template rendering errors to the Umbraco log.
+
 ## Implementation
 
 The implementation is fairly straight-forward and involves the following:
 - The property editor builds a dictionary of node properties and their values and does the same for any other nodes mentioned in the template.
-- The property editor renders the fallback template but does not store that in the field value (to avoid "caching" depedent values).
+- The property editor renders the fallback template but does not store that in the field value (to avoid "caching" dependent values).
 - There is a value converter that returns either the entered value or renders the fallback value.
 
 ## Limitations
