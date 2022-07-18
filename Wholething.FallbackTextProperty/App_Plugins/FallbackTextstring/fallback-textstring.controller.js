@@ -123,11 +123,15 @@ umbraco.controller('FallbackTextstringController', ['$scope', 'assetsService', '
     }
 
     function getContent() {
-        return block ?? editorState.getCurrent();
+        return editorState.getCurrent();
+    }
+
+    function getBlockId() {
+        return block ? block.key : null;
     }
 
     function getFallbackDictionary() {
-        return fallbackTextService.getTemplateData(getContent().key, $scope.model.alias, $scope.model.culture).then(function(data) {
+        return fallbackTextService.getTemplateData(getContent().key, getBlockId(), $scope.model.dataTypeKey, $scope.model.culture).then(function(data) {
             templateDictionary = data;
         }, function (error) {
             notificationsService.error('Fallback error', `Couldn\'t load dictionary for property (alias: \"${$scope.model.alias}\", node: ${getContent().key})`);

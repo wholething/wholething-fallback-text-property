@@ -1,14 +1,13 @@
 ﻿var umbraco = angular.module('umbraco');
 
 umbraco.factory('fallbackTextService', ['$http', 'eventsService', 'notificationsService', function ($http, eventsService, notificationsService) {
-    var baseUrl = '/Umbraco/FallbackText';
+    var baseUrl = '/Umbraco/Backoffice/FallbackText';
 
     var block = null;
 
     var editorOpenUnsubscribe = eventsService.on(
         'appState.editors.open',
         function (event, args) {
-            console.log(args);
             if (args.editor.view.includes('blockeditor')) {
                 if (block) {
                     notificationsService.error(
@@ -30,13 +29,12 @@ umbraco.factory('fallbackTextService', ['$http', 'eventsService', 'notifications
         }
     );
 
-    //$scope.onDestroy = function () {
-    //    editorOpenUnsubscribe();
-    //}
-
-    function getTemplateData(nodeId, propertyAlias, culture) {
-        console.log('getTemplateData', nodeId, propertyAlias);
-        return $http.get(`${baseUrl}/TemplateData/Get?nodeId=${nodeId}&propertyAlias=${propertyAlias}&culture=${culture}`).then(function (data) {
+    function getTemplateData(nodeId, blockId, dataTypeKey, culture) {
+        var url = `${baseUrl}/TemplateData/Get?nodeId=${nodeId}&dataTypeKey=${dataTypeKey}&culture=${culture}`;
+        if (blockId) {
+            url += `&blockId=${blockId}`;
+        }
+        return $http.get(url).then(function (data) {
             return data.data;
         });
     };

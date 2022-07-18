@@ -10,10 +10,18 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public class ParentFallbackTextResolver : FallbackTextResolver
     {
-        protected override string FunctionName => "parent";
-
-        public override void CheckArguments(string[] args)
+        public ParentFallbackTextResolver(IFallbackTextLoggerService logger) : base(logger)
         {
+        }
+
+
+        protected override string FunctionName => "parent";
+        protected override bool RequireContent => true;
+
+        public override void CheckArguments(string[] args, FallbackTextResolverContext context)
+        {
+            base.CheckArguments(args, context);
+
             if (args.Length > 0)
             {
                 throw new ArgumentException("Did not expect any arguments");

@@ -19,12 +19,13 @@ namespace Wholething.FallbackTextProperty.Composers
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddSingleton<IFallbackTextService, FallbackTextService>();
+            builder.Services.AddSingleton<IFallbackTextReferenceParser, FallbackTextReferenceParser>();
+            builder.Services.AddSingleton<IFallbackTextLoggerService, FallbackTextLoggerService>();
 
             builder.Services.AddSingleton<IFallbackTextResolver, ParentFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, RootFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, AncestorFallbackTextResolver>();
-
-            builder.Services.AddSingleton<IFallbackTextReferenceParser, FallbackTextReferenceParser>();
+            builder.Services.AddSingleton<IFallbackTextResolver, UrlFallbackTextResolver>();
         }
     }
 #else
@@ -33,16 +34,8 @@ namespace Wholething.FallbackTextProperty.Composers
         public void Compose(Composition composition)
         {
             composition.Register(typeof(IFallbackTextService), typeof(FallbackTextService), Lifetime.Singleton);
-
-            var resolvers = new List<IFallbackTextResolver>
-            {
-                new ParentFallbackTextResolver(),
-                new AncestorFallbackTextResolver(),
-                new RootFallbackTextResolver()
-            };
-            composition.Register(typeof(IEnumerable<IFallbackTextResolver>), resolvers);
-
             composition.Register(typeof(IFallbackTextReferenceParser), typeof(FallbackTextReferenceParser), Lifetime.Singleton);
+            composition.Register(typeof(IFallbackTextLoggerService), typeof(FallbackTextLoggerService), Lifetime.Singleton);
         }
     }
 #endif

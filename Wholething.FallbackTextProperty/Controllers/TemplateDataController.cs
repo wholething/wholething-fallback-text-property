@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Wholething.FallbackTextProperty.Services;
 #if NET5_0_OR_GREATER
 using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 #else
 using System.Web.Http;
@@ -14,7 +14,7 @@ using Umbraco.Web.WebApi;
 namespace Wholething.FallbackTextProperty.Controllers
 {
     [PluginController("FallbackText")]
-    public class TemplateDataController : UmbracoApiController
+    public class TemplateDataController : UmbracoAuthorizedApiController
     {
         private readonly IFallbackTextService _fallbackTextService;
 
@@ -25,25 +25,25 @@ namespace Wholething.FallbackTextProperty.Controllers
 
 #if NET5_0_OR_GREATER
         [HttpGet]
-        public IActionResult Get([Required] Guid nodeId, [Required] string propertyAlias, string culture = null)
+        public IActionResult Get([Required] Guid nodeId, [Required] Guid dataTypeKey, string culture = null, Guid? blockId = null)
         {
             if (!ModelState.IsValid)
             {
                 return new BadRequestResult();
             }
 
-            return new OkObjectResult(_fallbackTextService.BuildDictionary(nodeId, propertyAlias, culture));
+            return new OkObjectResult(_fallbackTextService.BuildDictionary(nodeId, blockId, dataTypeKey, culture));
         }
 #else
         [HttpGet]
-        public IHttpActionResult Get([Required] Guid nodeId, [Required] string propertyAlias, string culture = null)
+        public IHttpActionResult Get([Required] Guid nodeId, [Required] Guid dataTypeKey, string culture = null, Guid? blockId = null)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
 
-            return Ok(_fallbackTextService.BuildDictionary(nodeId, propertyAlias, culture));
+            return Ok(_fallbackTextService.BuildDictionary(nodeId, blockId, dataTypeKey, culture));
         }
 #endif
     }

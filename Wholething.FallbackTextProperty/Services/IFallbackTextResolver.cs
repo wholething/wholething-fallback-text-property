@@ -9,8 +9,8 @@ namespace Wholething.FallbackTextProperty.Services
 {
     public interface IFallbackTextResolver
     {
-        bool CanResolve(FallbackTextFunctionReference reference);
+        bool CanResolve(FallbackTextFunctionReference reference, FallbackTextResolverContext context);
         IPublishedContent Resolve(FallbackTextFunctionReference reference, FallbackTextResolverContext context);
-        void CheckArguments(string[] args);
+        void CheckArguments(string[] args, FallbackTextResolverContext context);
     }
 }

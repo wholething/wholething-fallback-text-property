@@ -12,32 +12,32 @@ using Umbraco.Core.Models.PublishedContent;
 
 namespace Wholething.FallbackTextProperty.Services.Impl
 {
-    public class RootFallbackTextResolver : FallbackTextResolver
+    public class UrlFallbackTextResolver : FallbackTextResolver
     {
         private readonly IPublishedSnapshotAccessor _publishedSnapshotAccessor;
 
-        public RootFallbackTextResolver(IFallbackTextLoggerService logger, IPublishedSnapshotAccessor publishedSnapshotAccessor) : base(logger)
+        public UrlFallbackTextResolver(IFallbackTextLoggerService logger, IPublishedSnapshotAccessor publishedSnapshotAccessor) : base(logger)
         {
             _publishedSnapshotAccessor = publishedSnapshotAccessor;
         }
 
-        protected override string FunctionName => "root";
+        protected override string FunctionName => "url";
         protected override bool RequireContent => false;
 
         public override void CheckArguments(string[] args, FallbackTextResolverContext context)
         {
             base.CheckArguments(args, context);
 
-            if (args.Length > 0)
+            if (args.Length != 1)
             {
-                throw new ArgumentException("Did not expect any arguments");
+                throw new ArgumentException("Expected exactly 1 argument");
             }
         }
 
         protected override IPublishedContent Resolve(string[] args, FallbackTextResolverContext context)
         {
             var snapshot = _publishedSnapshotAccessor.GetPublishedSnapshot();
-            return snapshot.Content.GetAtRoot().First();
+            return snapshot.Content.GetByRoute(args[0]);
         }
     }
 }
