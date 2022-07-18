@@ -25,6 +25,7 @@ namespace Wholething.FallbackTextProperty.Composers
             builder.Services.AddSingleton<IFallbackTextResolver, ParentFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, RootFallbackTextResolver>();
             builder.Services.AddSingleton<IFallbackTextResolver, AncestorFallbackTextResolver>();
+            builder.Services.AddSingleton<IFallbackTextResolver, UrlFallbackTextResolver>();
         }
     }
 #else

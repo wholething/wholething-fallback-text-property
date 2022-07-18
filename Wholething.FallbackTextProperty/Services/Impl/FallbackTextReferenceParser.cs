@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Wholething.FallbackTextProperty.Services.Models;
@@ -7,11 +8,9 @@ namespace Wholething.FallbackTextProperty.Services.Impl
 {
     public class FallbackTextReferenceParser : IFallbackTextReferenceParser
     {
-        private const string FunctionReferencePattern = @"{{(([a-zA-Z]+)(\(([\w, ]+)\))?):\w+}}";
-
         public List<FallbackTextFunctionReference> Parse(string template)
         {
-            var regex = new Regex(FunctionReferencePattern);
+            var regex = new Regex(Constants.Regex.FunctionReferencePattern);
             var matches = regex.Matches(template);
 
             var references = new List<FallbackTextFunctionReference>();
@@ -19,7 +18,7 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             foreach (Match match in matches)
             {
                 var args = match.Groups.Count < 5 ?
-                    new string[0] :
+                    Array.Empty<string>() :
                     match.Groups[4].Value
                         .Split(',')
                         .Select(s => s.Trim())

@@ -78,25 +78,44 @@ namespace Wholething.FallbackTextProperty.Services.Impl
             var outDictionary = new Dictionary<string, object>();
             foreach (var key in dictionary.Keys)
             {
-                var outKey = key;
-                if (char.IsDigit(key[0]))
-                {
-                    outKey = $"node{key}";
-                }
+                var outKey = PreprocessKey(key);
                 outDictionary[outKey] = dictionary[key];
             }
             return outDictionary;
+        }
+
+        private string PreprocessKey(string key)
+        {
+            if (char.IsDigit(key[0]))
+            {
+                return $"node{key}";
+            }
+            else
+            {
+                return key.StripNonKeyChars();
+            }
         }
 
         private string PreprocessTemplate(string template)
         {
             // There is some quirk of the Mustache implementation that means a variable name cannot
             // start with a number!
-            return Regex.Replace(
+            template = Regex.Replace(
                 template,
                 IdReferencePattern,
                 m => $"{{{{node{m.Groups[1].Value}:{m.Groups[2].Value}}}}}"
             );
+
+            template = Regex.Replace(
+                template,
+                Constants.Regex.FunctionReferencePattern,
+                m =>
+                {
+                    var key = $"{m.Groups[1].Value}:{m.Groups[5].Value}";
+                    return $"{{{{{key.StripNonKeyChars()}}}}}";
+                });
+
+            return template;
         }
 
         public Dictionary<string, object> BuildDictionary(Guid nodeId, Guid? blockId, Guid dataTypeAlias, string culture)
