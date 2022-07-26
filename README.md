@@ -1,8 +1,10 @@
 # Wholething Fallback Text Property
 
-This Umbraco package provides two custom text property editors, "Textstring with Fallback" and "Textarea with Fallback", that allow developers to enter "fallback value", rendered from a Mustache template.
+This Umbraco package provides two custom text property editors, "Textstring with Fallback" and "Textarea with Fallback">. 
 
-The fallback can be built from other node properties and properties of other specific nodes in the content tree.
+This allows developers to enter "fallback value" for a node property. Editors will see this fallback value and can decide if they want to enter a new custom value.
+
+The fallback is rendered from a Mustache template and can be built from other node properties and properties of other specific nodes in the content tree.
 
 If you like this property editor you may also like [Wholething.FallbackImagePickerProperty](https://github.com/wholething/wholething-fallback-image-picker-property).
 
@@ -18,7 +20,7 @@ Blocks and nested content only have limited support since we can't retrieve an e
 
 ## Use-case
 
-The use-case for this package is simple: editors often want the option to override images/values but it is unclear what the default value is. We feel it's a significant improvement in experience for editors to be able to see the default value before deciding to override it.
+Developers often use fallbacks in their code. Therefore, these fallback values are hidden from editor. This package displays the fallback value so editors can decide if they want to leave it as a fallback or provide a new value.
 
 ## Team
 
